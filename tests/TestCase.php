@@ -2,9 +2,9 @@
 
 namespace Hettiger\Honeypot\Tests;
 
+use Hettiger\Honeypot\HoneypotServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Hettiger\Honeypot\HoneypotServiceProvider;
 
 class TestCase extends Orchestra
 {

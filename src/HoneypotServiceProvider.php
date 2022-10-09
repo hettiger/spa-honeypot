@@ -2,9 +2,9 @@
 
 namespace Hettiger\Honeypot;
 
+use Hettiger\Honeypot\Commands\HoneypotCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Hettiger\Honeypot\Commands\HoneypotCommand;
 
 class HoneypotServiceProvider extends PackageServiceProvider
 {
