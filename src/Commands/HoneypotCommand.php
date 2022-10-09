@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Hettiger\Honeypot\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class HoneypotCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'spa-honeypot';
 
     public $description = 'My command';
 
