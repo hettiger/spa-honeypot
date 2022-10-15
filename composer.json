@@ -27,6 +27,7 @@
         "orchestra/testbench": "^7.0",
         "pestphp/pest": "^1.21",
         "pestphp/pest-plugin-laravel": "^1.1",
+        "pestphp/pest-plugin-mock": "^1.0",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-phpunit": "^1.0",
@@ -41,7 +42,10 @@
     "autoload-dev": {
         "psr-4": {
             "Hettiger\\Honeypot\\Tests\\": "tests"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "scripts": {
         "analyse": "vendor/bin/phpstan analyse",
