@@ -1,7 +1,7 @@
 <?php
 
-use Hettiger\Honeypot\Tests\Fakes\CacheFake;
 use function Hettiger\Honeypot\resolveByType;
+use Hettiger\Honeypot\Tests\Fakes\CacheFake;
 
 beforeEach(fn () => CacheFake::clear());
 
@@ -20,7 +20,7 @@ test('pull returns null if item does not exist', function () {
 });
 
 test("pull removes item from the store and returns it's value", function ($ttl) {
-    if (!is_null($ttl)) {
+    if (! is_null($ttl)) {
         withTime(1337);
     }
 
@@ -44,7 +44,7 @@ test("pull removes item from the store and returns it's value", function ($ttl) 
 ]);
 
 test('pull removes expired item from the store and returns null', function ($ttl) {
-    if (!($ttl instanceof DateTime)) {
+    if (! ($ttl instanceof DateTime)) {
         withTime(1337);
     }
     $cache = resolveByType(CacheFake::class);

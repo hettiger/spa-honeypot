@@ -16,7 +16,8 @@ class FormToken
         return resolveByType(FormToken::class);
     }
 
-    public static function fromId(string $id): static {
+    public static function fromId(string $id): static
+    {
         return resolveByType(FormToken::class, [
             'id' => $id,
         ]);

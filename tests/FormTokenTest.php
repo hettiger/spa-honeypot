@@ -2,17 +2,19 @@
 
 use Hettiger\Honeypot\Contracts\Cache;
 use Hettiger\Honeypot\FormToken;
-use Hettiger\Honeypot\Tests\Fakes\CacheFake;
 use function Hettiger\Honeypot\resolveByType;
+use Hettiger\Honeypot\Tests\Fakes\CacheFake;
 use function Pest\Laravel\swap;
 
 beforeEach(fn () => CacheFake::clear());
 
-function withValidTime(int $cachedTokenTime) {
+function withValidTime(int $cachedTokenTime)
+{
     withTime($cachedTokenTime + config('spa-honeypot.min_age') + 1);
 }
 
-function withCachedToken(string $id, int $time) {
+function withCachedToken(string $id, int $time)
+{
     $cache = resolveByType(Cache::class);
     $cache->put($id, $time);
 }

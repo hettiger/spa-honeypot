@@ -8,11 +8,13 @@ use Hettiger\Honeypot\Contracts\Cache;
 use Hettiger\Honeypot\Contracts\TimeSource;
 use Illuminate\Support\Collection;
 
-class CacheItem {
+class CacheItem
+{
     public function __construct(
         public mixed $value,
         public ?DateTime $expiresAt,
-    ) {}
+    ) {
+    }
 }
 
 class CacheFake implements Cache
@@ -34,7 +36,8 @@ class CacheFake implements Cache
 
     public function __construct(
         protected TimeSource $timeSource
-    ) {}
+    ) {
+    }
 
     public function put($key, $value, $ttl = null)
     {
