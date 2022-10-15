@@ -2,10 +2,10 @@
 
 namespace Hettiger\Honeypot;
 
-use DateInterval;
-use Hettiger\Honeypot\Contracts\Cache;
-use Hettiger\Honeypot\Contracts\TimeSource;
-use Hettiger\Honeypot\Contracts\UuidGenerator;
+use Carbon\CarbonInterval;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class FormToken
 {
@@ -24,21 +24,18 @@ class FormToken
     }
 
     public function __construct(
-        protected TimeSource $timeSource,
-        protected UuidGenerator $uuidGenerator,
-        protected Cache $cache,
         protected array $config,
         ?string $id = null,
     ) {
-        $this->id = $id ?? $this->uuidGenerator->uuid();
+        $this->id = $id ?? Str::uuid();
     }
 
     public function persisted(): static
     {
-        $this->cache->put(
+        Cache::put(
             $this->id,
-            $this->timeSource->now(),
-            new DateInterval('PT15M'),
+            now()->getTimestamp(),
+            CarbonInterval::minutes(15),
         );
 
         return $this;
@@ -52,9 +49,10 @@ class FormToken
      */
     public function isValid(): bool
     {
-        $age = $this->cache->pull($this->id);
-        $minAge = (int) $this->config['min_age'];
+        /** @var ?int $createdAt */
+        $createdAt = Cache::pull($this->id);
+        $minAge = CarbonInterval::seconds((int) $this->config['min_age']);
 
-        return $age !== null && $age + $minAge < $this->timeSource->now();
+        return $createdAt !== null && Carbon::createFromTimestamp($createdAt)->add($minAge)->lessThan(now());
     }
 }
