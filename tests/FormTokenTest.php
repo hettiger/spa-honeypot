@@ -4,20 +4,21 @@ use Carbon\CarbonInterval;
 use Hettiger\Honeypot\FormToken;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use function Pest\Laravel\travel;
+use function Pest\Laravel\travelBack;
+use function Pest\Laravel\travelTo;
 
-function withValidTime(int $cachedTokenTime)
-{
-    freezeTimestamp($cachedTokenTime + config('spa-honeypot.min_age') + 1);
-}
+beforeEach(function () {
+    Str::freezeUuids();
+    travelTo(today());
+});
 
-function withCachedToken(string $id, int $timestamp)
-{
-    Cache::put($id, $timestamp);
-}
+afterEach(function () {
+    Str::createUuidsNormally();
+    travelBack();
+});
 
 it('can be instantiated using a factory function', function () {
-    Str::freezeUuids();
-
     $token = FormToken::make();
 
     expect($token)
@@ -33,12 +34,9 @@ it('can be instantiated using an existing ID', function () {
 });
 
 it('can be stored in the cache for future validation', function () {
-    Str::freezeUuids();
-    freezeTimestamp(1337);
-
     Cache::shouldReceive('put')->withArgs(
         fn (string $key, int $value, CarbonInterval $ttl) => $key === Str::uuid()->toString()
-            && $value === 1337
+            && $value === now()->timestamp
             && now()->add($ttl)->equalTo(now()->add(CarbonInterval::minutes(15)))
     )->once();
 
@@ -55,29 +53,26 @@ it('fails validation when it is not present in the cache', function () {
 
 it('fails validation when it is not old enough', function () {
     foreach (range(0, config('spa-honeypot.min_age')) as $age) {
-        freezeTimestamp(1337 + $age);
-        withCachedToken('uuid-fake', 1337);
+        $token = FormToken::make()->persisted();
 
-        $token = FormToken::fromId('uuid-fake');
+        travel($age)->seconds();
 
         expect($token->isValid())->toBeFalse();
     }
 });
 
 it('passes validation when it is old enough', function () {
-    withCachedToken('uuid-fake', 1337);
-    withValidTime(1337);
+    $token = FormToken::make()->persisted();
 
-    $token = FormToken::fromId('uuid-fake');
+    travel(config('spa-honeypot.min_age') + 1)->seconds();
 
     expect($token->isValid())->toBeTrue();
 });
 
 it('fails validation on subsequent calls', function () {
-    withCachedToken('uuid-fake', 1337);
-    withValidTime(1337);
+    $token = FormToken::make()->persisted();
 
-    $token = FormToken::fromId('uuid-fake');
+    travel(config('spa-honeypot.min_age') + 1)->seconds();
 
     expect($token->isValid())
         ->toBeTrue()

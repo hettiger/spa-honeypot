@@ -21,7 +21,6 @@ class TestCase extends Orchestra
     {
         return [
             HoneypotServiceProvider::class,
-            TestingServiceProvider::class,
         ];
     }
 
