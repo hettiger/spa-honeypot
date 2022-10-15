@@ -23,7 +23,7 @@ class HandleFormTokenRequests
         abort_if(
             ! $this->token($request)->isValid(),
             500,
-            headers: $this->headers()
+            headers: $this->newTokenHeader()
         );
 
         $response = $next($request);
@@ -32,7 +32,7 @@ class HandleFormTokenRequests
             $response = response($response);
         }
 
-        $response->headers->add($this->headers());
+        $response->headers->add($this->newTokenHeader());
 
         return $response;
     }
@@ -52,7 +52,7 @@ class HandleFormTokenRequests
         return $request->headers->get($this->config['header']);
     }
 
-    protected function headers(): array
+    protected function newTokenHeader(): array
     {
         return [$this->config['header'] => FormToken::make()->persisted()->id];
     }
