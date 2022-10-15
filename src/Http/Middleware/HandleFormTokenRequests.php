@@ -6,7 +6,7 @@ use Closure;
 use Hettiger\Honeypot\FormToken;
 use Illuminate\Http\Request;
 
-class RespondWithFormToken
+class HandleFormTokenRequests
 {
     public function __construct(
         protected array $config
@@ -15,7 +15,7 @@ class RespondWithFormToken
 
     public function handle(Request $request, Closure $next)
     {
-        $header = $this->config['form_token_header'];
+        $header = $this->config['header'];
 
         if ($request->headers->has($header) && empty($request->headers->get($header))) {
             return FormToken::make()->persisted()->id;
