@@ -53,6 +53,9 @@ it('bails out when a valid token is present in the header', function (array $con
 
     $response = $sut->handle($request, fn () => 'bailed out');
 
-    expect($response)->toEqual('bailed out');
+    expect($response->getContent())
+        ->toEqual('bailed out')
+        ->and($response->headers->contains($config['header'], Str::uuid()->toString()))
+        ->toBeTrue();
 })
 ->with('config');

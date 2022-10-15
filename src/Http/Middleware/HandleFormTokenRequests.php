@@ -5,6 +5,7 @@ namespace Hettiger\Honeypot\Http\Middleware;
 use Closure;
 use Hettiger\Honeypot\FormToken;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class HandleFormTokenRequests
 {
@@ -25,7 +26,15 @@ class HandleFormTokenRequests
             headers: $this->headers()
         );
 
-        return $next($request);
+        $response = $next($request);
+
+        if (! ($response instanceof Response)) {
+            $response = response($response);
+        }
+
+        $response->headers->add($this->headers());
+
+        return $response;
     }
 
     protected function isFormTokenRequest(Request $request): bool
