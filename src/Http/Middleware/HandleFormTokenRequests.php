@@ -15,12 +15,36 @@ class HandleFormTokenRequests
 
     public function handle(Request $request, Closure $next)
     {
-        $header = $this->config['header'];
-
-        if ($request->headers->has($header) && empty($request->headers->get($header))) {
-            return FormToken::make()->persisted()->id;
+        if (! $this->isFormTokenRequest($request)) {
+            return $next($request);
         }
 
+        abort_if(
+            ! $this->token($request)->isValid(),
+            500,
+            headers: $this->headers()
+        );
+
         return $next($request);
+    }
+
+    protected function isFormTokenRequest(Request $request): bool
+    {
+        return $request->headers->has($this->config['header']);
+    }
+
+    protected function token(Request $request): FormToken
+    {
+        return FormToken::fromId($this->tokenId($request));
+    }
+
+    protected function tokenId(Request $request): ?string
+    {
+        return $request->headers->get($this->config['header']);
+    }
+
+    protected function headers(): array
+    {
+        return [$this->config['header'] => FormToken::make()->persisted()->id];
     }
 }
