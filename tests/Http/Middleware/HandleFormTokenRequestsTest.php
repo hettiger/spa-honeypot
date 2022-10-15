@@ -5,19 +5,9 @@ use Hettiger\Honeypot\Http\Middleware\HandleFormTokenRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use function Pest\Laravel\travel;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 beforeEach(function () {
     Str::freezeUuids();
-});
-
-expect()->extend('toAbortWith', function (int $status, array $headers) {
-    $this->toThrow(
-        fn (HttpException $exception) => expect($exception->getStatusCode())
-            ->toEqual($status)
-            ->and($exception->getHeaders())
-            ->toEqual($headers)
-    );
 });
 
 it('bails out when header is missing', function () {
@@ -35,7 +25,7 @@ it('aborts when an invalid or empty token is present in the header', function (a
     $request->headers->set($config['header'], $token);
 
     expect(fn () => $sut->handle($request, fn () => 'bailed out'))
-        ->toAbortWith(500, [$config['header'] => Str::uuid()->toString()]);
+        ->toAbortWith(500, headers: [$config['header'] => Str::uuid()->toString()]);
 })
 ->with('config')
 ->with([
