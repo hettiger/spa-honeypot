@@ -29,7 +29,7 @@ it('can be instantiated using an existing ID', function () {
 
 it('can be stored in the cache for future validation', function (array $config) {
     Cache::shouldReceive('put')->withArgs(
-        fn (string $key, int $value, CarbonInterval $ttl) => $key === Str::uuid()->toString()
+        fn (string $key, int $value, CarbonInterval $ttl) => $key === $config['cache_prefix'].Str::uuid()->toString()
             && $value === now()->timestamp
             && now()->add($ttl)->equalTo(now()->add($config['max_age']))
     )->once();

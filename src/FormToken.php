@@ -32,7 +32,7 @@ class FormToken
     public function persisted(): static
     {
         Cache::put(
-            $this->id,
+            $this->cacheKey(),
             now()->getTimestamp(),
             $this->config['max_age'],
         );
@@ -49,9 +49,14 @@ class FormToken
     public function isValid(): bool
     {
         /** @var ?int $createdAt */
-        $createdAt = Cache::pull($this->id);
+        $createdAt = Cache::pull($this->cacheKey());
         $minAge = $this->config['min_age'];
 
         return $createdAt !== null && Carbon::createFromTimestamp($createdAt)->add($minAge)->lessThan(now());
+    }
+
+    protected function cacheKey(): string
+    {
+        return $this->config['cache_prefix'].$this->id;
     }
 }
