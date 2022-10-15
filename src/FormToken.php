@@ -11,14 +11,14 @@ class FormToken
 {
     public readonly string $id;
 
-    public static function make(): static
+    public static function make(): FormToken
     {
-        return resolveByType(FormToken::class);
+        return resolve(FormToken::class);
     }
 
-    public static function fromId(string $id): static
+    public static function fromId(string $id): FormToken
     {
-        return resolveByType(FormToken::class, [
+        return resolve(FormToken::class, [
             'id' => $id,
         ]);
     }
@@ -53,7 +53,8 @@ class FormToken
     public function isValid(): bool
     {
         $age = $this->cache->pull($this->id);
+        $minAge = (int) $this->config['min_age'];
 
-        return $age !== null && $age + $this->config['min_age'] < $this->timeSource->now();
+        return $age !== null && $age + $minAge < $this->timeSource->now();
     }
 }

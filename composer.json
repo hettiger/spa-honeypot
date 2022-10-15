@@ -42,10 +42,7 @@
     "autoload-dev": {
         "psr-4": {
             "Hettiger\\Honeypot\\Tests\\": "tests"
-        },
-        "files": [
-            "src/helpers.php"
-        ]
+        }
     },
     "scripts": {
         "analyse": "vendor/bin/phpstan analyse",

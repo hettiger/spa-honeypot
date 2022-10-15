@@ -7,6 +7,20 @@ use function Pest\Laravel\swap;
 
 uses(TestCase::class)->in(__DIR__);
 
+/**
+ * Returns a service of the given `$type` from the container
+ *
+ * @template T
+ *
+ * @param  T  $type
+ * @param  array  $parameters
+ * @return T
+ */
+function resolveByType(mixed $type, array $parameters = [])
+{
+    return app($type, $parameters);
+}
+
 function withTime(int $time)
 {
     swap(TimeSource::class, mock(TimeSource::class)->expect(

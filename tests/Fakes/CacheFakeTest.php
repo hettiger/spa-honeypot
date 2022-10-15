@@ -1,6 +1,5 @@
 <?php
 
-use function Hettiger\Honeypot\resolveByType;
 use Hettiger\Honeypot\Tests\Fakes\CacheFake;
 
 beforeEach(fn () => CacheFake::clear());

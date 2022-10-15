@@ -2,7 +2,6 @@
 
 use Hettiger\Honeypot\Contracts\Cache;
 use Hettiger\Honeypot\FormToken;
-use function Hettiger\Honeypot\resolveByType;
 use Hettiger\Honeypot\Tests\Fakes\CacheFake;
 use function Pest\Laravel\swap;
 
