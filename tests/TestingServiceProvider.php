@@ -28,10 +28,6 @@ class TestingServiceProvider extends ServiceProvider
         $this->app->instance(UuidGenerator::class, $uuidGenerator);
 
         $this->app->singleton(Cache::class, CacheFake::class);
-
-        $this->app->when(FormToken::class)
-            ->needs('$config')
-            ->give(config('spa-honeypot'));
     }
 
     /**
@@ -41,6 +37,8 @@ class TestingServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->app->when(FormToken::class)
+            ->needs('$config')
+            ->give(config('spa-honeypot'));
     }
 }
