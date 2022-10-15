@@ -11,6 +11,11 @@ class FormToken
 {
     public readonly string $id;
 
+    public static function make(): static
+    {
+        return resolveByType(FormToken::class);
+    }
+
     public static function fromId(string $id): static {
         return resolveByType(FormToken::class, [
             'id' => $id,

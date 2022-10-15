@@ -17,6 +17,17 @@ function withCachedToken(string $id, int $time) {
     $cache->put($id, $time);
 }
 
+it('can be instantiated using a factory function', function () {
+    withUuid('uuid-fake');
+
+    $token = FormToken::make();
+
+    expect($token)
+        ->toBeInstanceOf(FormToken::class)
+        ->and($token->id)
+        ->toEqual('uuid-fake');
+});
+
 it('can be instantiated using an existing ID', function () {
     $token = FormToken::fromId('id-fake');
 
@@ -35,7 +46,7 @@ it('can be stored in the cache for future validation', function () {
         ]),
     ));
 
-    $token = resolveByType(FormToken::class);
+    $token = FormToken::make();
 
     expect($token->persisted())->toBeInstanceOf(FormToken::class);
 });
