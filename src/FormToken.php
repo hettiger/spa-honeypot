@@ -2,7 +2,6 @@
 
 namespace Hettiger\Honeypot;
 
-use Carbon\CarbonInterval;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -35,7 +34,7 @@ class FormToken
         Cache::put(
             $this->id,
             now()->getTimestamp(),
-            CarbonInterval::minutes(15),
+            $this->config['max_age'],
         );
 
         return $this;
@@ -51,7 +50,7 @@ class FormToken
     {
         /** @var ?int $createdAt */
         $createdAt = Cache::pull($this->id);
-        $minAge = CarbonInterval::seconds((int) $this->config['min_age']);
+        $minAge = $this->config['min_age'];
 
         return $createdAt !== null && Carbon::createFromTimestamp($createdAt)->add($minAge)->lessThan(now());
     }
