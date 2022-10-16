@@ -73,3 +73,11 @@ it('fails validation on subsequent calls', function (array $config) {
         ->and($token->isValid())
         ->toBeFalse();
 })->with('config');
+
+test('`isValid()` does not read from cache when ID is not a valid UUID', function () {
+    $token = FormToken::fromId('invalid-id');
+
+    Cache::shouldReceive('pull')->never();
+
+    expect($token->isValid())->toBeFalse();
+});

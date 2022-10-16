@@ -5,6 +5,7 @@ namespace Hettiger\Honeypot;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid;
 
 class FormToken
 {
@@ -48,6 +49,10 @@ class FormToken
      */
     public function isValid(): bool
     {
+        if (! Uuid::isValid($this->id)) {
+            return false;
+        }
+
         /** @var ?int $createdAt */
         $createdAt = Cache::pull($this->cacheKey());
         $minAge = $this->config['min_age'];
