@@ -11,14 +11,14 @@ class RequireFormToken
     use RecognizesFormTokenRequests;
 
     public function __construct(
-        protected array $config
+        protected array $config,
     ) {
     }
 
     public function handle(Request $request, Closure $next)
     {
         abort_unless(
-            $this->isFormTokenRequest($request),
+            $this->isFormTokenRequest(),
             Response::HTTP_INTERNAL_SERVER_ERROR,
         );
 

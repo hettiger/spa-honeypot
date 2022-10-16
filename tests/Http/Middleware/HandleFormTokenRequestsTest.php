@@ -2,7 +2,6 @@
 
 use Hettiger\Honeypot\FormToken;
 use Hettiger\Honeypot\Http\Middleware\HandleFormTokenRequests;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use function Pest\Laravel\travel;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +13,7 @@ beforeEach(function () {
 it('bails out when header is missing', function () {
     $sut = resolveByType(HandleFormTokenRequests::class);
 
-    $response = $sut->handle(new Request(), fn () => 'bailed out');
+    $response = $sut->handle(makeRequest(), fn () => 'bailed out');
 
     expect($response)->toEqual('bailed out');
 });
@@ -22,7 +21,7 @@ it('bails out when header is missing', function () {
 it('aborts when an invalid or empty token is present in the header', function (array $config, string $token) {
     $sut = resolveByType(HandleFormTokenRequests::class);
 
-    $request = new Request();
+    $request = makeRequest();
     $request->headers->set($config['header'], $token);
 
     expect(fn () => $sut->handle($request, fn () => 'bailed out'))
@@ -41,7 +40,7 @@ it('aborts when an invalid or empty token is present in the header', function (a
 it('bails out when a valid token is present in the header', function (array $config) {
     $sut = resolveByType(HandleFormTokenRequests::class);
 
-    $request = new Request();
+    $request = makeRequest();
     $request->headers->set($config['header'], FormToken::make()->persisted()->id);
     travel($config['min_age']->totalSeconds)->seconds();
 

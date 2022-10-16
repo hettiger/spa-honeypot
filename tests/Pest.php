@@ -1,6 +1,8 @@
 <?php
 
 use Hettiger\Honeypot\Tests\TestCase;
+use Illuminate\Http\Request;
+use function Pest\Laravel\swap;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 uses(TestCase::class)->in(__DIR__);
@@ -17,6 +19,14 @@ uses(TestCase::class)->in(__DIR__);
 function resolveByType(mixed $type, array $parameters = [])
 {
     return app($type, $parameters);
+}
+
+function makeRequest(): Request
+{
+    $request = new Request();
+    swap('request', $request);
+
+    return $request;
 }
 
 expect()->extend('toAbortWith', function (int $statusCode, string $message = '', array $headers = []) {

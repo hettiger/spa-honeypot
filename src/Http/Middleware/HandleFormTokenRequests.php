@@ -12,18 +12,18 @@ class HandleFormTokenRequests
     use RecognizesFormTokenRequests;
 
     public function __construct(
-        protected array $config
+        protected array $config,
     ) {
     }
 
     public function handle(Request $request, Closure $next)
     {
-        if (! $this->isFormTokenRequest($request)) {
+        if (! $this->isFormTokenRequest()) {
             return $next($request);
         }
 
         abort_unless(
-            $this->token($request)->isValid(),
+            $this->token()->isValid(),
             Response::HTTP_INTERNAL_SERVER_ERROR,
             headers: $this->newTokenHeader()
         );
@@ -39,14 +39,14 @@ class HandleFormTokenRequests
         return $response;
     }
 
-    protected function token(Request $request): FormToken
+    protected function token(): FormToken
     {
-        return FormToken::fromId($this->tokenId($request));
+        return FormToken::fromId($this->tokenId());
     }
 
-    protected function tokenId(Request $request): ?string
+    protected function tokenId(): ?string
     {
-        return $request->headers->get($this->config['header']);
+        return request()->headers->get($this->config['header']);
     }
 
     protected function newTokenHeader(): array
