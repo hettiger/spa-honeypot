@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) hettiger <beheben-granulat-0y@icloud.com>
+Copyright (c) Martin Hettiger <beheben-granulat-0y@icloud.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
