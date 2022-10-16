@@ -15,7 +15,8 @@ final class RequireFormTokenDirective extends BaseDirective implements FieldMidd
 {
     public function __construct(
         protected array $config
-    ) {}
+    ) {
+    }
 
     public static function definition(): string
     {
