@@ -5,6 +5,7 @@ use Hettiger\Honeypot\Http\Middleware\HandleFormTokenRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use function Pest\Laravel\travel;
+use Symfony\Component\HttpFoundation\Response;
 
 beforeEach(function () {
     Str::freezeUuids();
@@ -25,7 +26,10 @@ it('aborts when an invalid or empty token is present in the header', function (a
     $request->headers->set($config['header'], $token);
 
     expect(fn () => $sut->handle($request, fn () => 'bailed out'))
-        ->toAbortWith(500, headers: [$config['header'] => Str::uuid()->toString()]);
+        ->toAbortWith(
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            headers: [$config['header'] => Str::uuid()->toString()]
+        );
 })
 ->with('config')
 ->with([
