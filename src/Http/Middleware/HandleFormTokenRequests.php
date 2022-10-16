@@ -22,6 +22,7 @@ class HandleFormTokenRequests
             return $next($request);
         }
 
+        // TODO: This abort response does not conform to GraphQL spec
         abort_unless(
             $this->token()->isValid(),
             Response::HTTP_INTERNAL_SERVER_ERROR,
