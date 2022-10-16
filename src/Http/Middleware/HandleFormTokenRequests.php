@@ -22,8 +22,8 @@ class HandleFormTokenRequests
             return $next($request);
         }
 
-        abort_if(
-            ! $this->token($request)->isValid(),
+        abort_unless(
+            $this->token($request)->isValid(),
             Response::HTTP_INTERNAL_SERVER_ERROR,
             headers: $this->newTokenHeader()
         );
