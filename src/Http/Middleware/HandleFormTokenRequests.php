@@ -46,7 +46,8 @@ class HandleFormTokenRequests
         return [$this->tokenHeaderName() => FormToken::make()->persisted()->id];
     }
 
-    protected function responseWithNewTokenHeader(mixed $response): Response {
+    protected function responseWithNewTokenHeader(mixed $response): Response
+    {
         if (! ($response instanceof Response)) {
             $response = response($response);
         }
