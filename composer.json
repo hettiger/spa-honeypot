@@ -20,10 +20,17 @@
         "spatie/laravel-package-tools": "^1.13.0",
         "illuminate/contracts": "^9.0"
     },
+    "suggest": {
+        "nuwave/lighthouse": "This package supports Lighthouse PHP (optional)"
+    },
+    "conflict": {
+        "nuwave/lighthouse": "<5.61"
+    },
     "require-dev": {
         "laravel/pint": "^1.0",
         "nunomaduro/collision": "^6.0",
         "nunomaduro/larastan": "^2.0.1",
+        "nuwave/lighthouse": "^5.61",
         "orchestra/testbench": "^7.0",
         "pestphp/pest": "^1.21",
         "pestphp/pest-plugin-laravel": "^1.1",
