@@ -46,11 +46,11 @@ class HandleFormTokenRequests
 
     protected function tokenId(): ?string
     {
-        return request()->headers->get($this->config['header']);
+        return request()->headers->get($this->tokenHeaderName());
     }
 
     protected function newTokenHeader(): array
     {
-        return [$this->config['header'] => FormToken::make()->persisted()->id];
+        return [$this->tokenHeaderName() => FormToken::make()->persisted()->id];
     }
 }
