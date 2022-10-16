@@ -80,17 +80,13 @@ Route::post('form', fn () => 'OK')->middleware('form.token');
 ],
 ```
 
-2. Add the `@requireFormToken` directive to any input that you want to guard against SPAM
+2. Add the `@requireFormToken` directive to any field that you want to protect against SPAM
 
 ```graphql
 # e.g. graphql/contact.graphql
 
-input ContactRequestInput @requireFormToken {
-    name: String! @rules(apply: ["string", "max:120"])
-    email: String! @rules(apply: ["string", "email", "max:254"])
-    subject: String! @rules(apply: ["string", "max:78"])
-    message: String! @rules(apply: ["string", "max:10000"])
-    consent: Boolean! @rules(apply: ["accepted"])
+extend type Mutation {
+    sendContactRequest(input: SendContactRequestInput): SendContactRequestPayload @requireFormToken
 }
 ```
 
