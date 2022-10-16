@@ -28,15 +28,7 @@ class HandleFormTokenRequests
             headers: $this->newTokenHeader()
         );
 
-        $response = $next($request);
-
-        if (! ($response instanceof Response)) {
-            $response = response($response);
-        }
-
-        $response->headers->add($this->newTokenHeader());
-
-        return $response;
+        return $this->responseWithNewTokenHeader($next($request));
     }
 
     protected function token(): FormToken
@@ -52,5 +44,15 @@ class HandleFormTokenRequests
     protected function newTokenHeader(): array
     {
         return [$this->tokenHeaderName() => FormToken::make()->persisted()->id];
+    }
+
+    protected function responseWithNewTokenHeader(mixed $response): Response {
+        if (! ($response instanceof Response)) {
+            $response = response($response);
+        }
+
+        $response->headers->add($this->newTokenHeader());
+
+        return $response;
     }
 }
