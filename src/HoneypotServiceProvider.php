@@ -5,6 +5,7 @@ namespace Hettiger\Honeypot;
 use Hettiger\Honeypot\Commands\HoneypotCommand;
 use Hettiger\Honeypot\Http\Middleware\HandleFormTokenRequests;
 use Hettiger\Honeypot\Http\Middleware\RequireFormToken;
+use Illuminate\Events\Dispatcher;
 use Illuminate\Routing\Router;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -32,6 +33,7 @@ class HoneypotServiceProvider extends PackageServiceProvider
 
         $this->provideConfig();
         $this->registerMiddleware();
+        $this->registerGraphQLNamespaces();
     }
 
     protected function provideConfig(): void
@@ -52,5 +54,17 @@ class HoneypotServiceProvider extends PackageServiceProvider
         $router->aliasMiddleware('form.token.handle', HandleFormTokenRequests::class);
         $router->aliasMiddleware('form.token.require', RequireFormToken::class);
         $router->middlewareGroup('form.token', ['form.token.handle', 'form.token.require']);
+    }
+
+    protected function registerGraphQLNamespaces()
+    {
+        $events = resolveByType(Dispatcher::class);
+
+        $events->listen(
+            'Nuwave\\Lighthouse\\Events\\RegisterDirectiveNamespaces',
+            fn () => [
+                'Hettiger\\Honeypot\\GraphQL\Directives',
+            ]
+        );
     }
 }
