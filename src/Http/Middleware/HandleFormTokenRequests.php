@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class HandleFormTokenRequests
 {
+    use RecognizesFormTokenRequests;
+
     public function __construct(
         protected array $config
     ) {
@@ -35,11 +37,6 @@ class HandleFormTokenRequests
         $response->headers->add($this->newTokenHeader());
 
         return $response;
-    }
-
-    protected function isFormTokenRequest(Request $request): bool
-    {
-        return $request->headers->has($this->config['header']);
     }
 
     protected function token(Request $request): FormToken

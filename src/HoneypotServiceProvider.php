@@ -4,6 +4,7 @@ namespace Hettiger\Honeypot;
 
 use Hettiger\Honeypot\Commands\HoneypotCommand;
 use Hettiger\Honeypot\Http\Middleware\HandleFormTokenRequests;
+use Hettiger\Honeypot\Http\Middleware\RequireFormToken;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -31,6 +32,7 @@ class HoneypotServiceProvider extends PackageServiceProvider
         $this->app->when([
             FormToken::class,
             HandleFormTokenRequests::class,
+            RequireFormToken::class,
         ])
             ->needs('$config')
             ->give(config('spa-honeypot'));
