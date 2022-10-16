@@ -37,7 +37,10 @@
         "psr-4": {
             "Hettiger\\Honeypot\\": "src",
             "Hettiger\\Honeypot\\Database\\Factories\\": "database/factories"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

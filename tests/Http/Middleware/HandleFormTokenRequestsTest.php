@@ -2,6 +2,7 @@
 
 use Hettiger\Honeypot\FormToken;
 use Hettiger\Honeypot\Http\Middleware\HandleFormTokenRequests;
+use function Hettiger\Honeypot\resolveByType;
 use Illuminate\Support\Str;
 use function Pest\Laravel\travel;
 use Symfony\Component\HttpFoundation\Response;

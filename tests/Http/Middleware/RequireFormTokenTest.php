@@ -1,6 +1,7 @@
 <?php
 
 use Hettiger\Honeypot\Http\Middleware\RequireFormToken;
+use function Hettiger\Honeypot\resolveByType;
 use Symfony\Component\HttpFoundation\Response;
 
 it('bails out when header is present', function (array $config) {
