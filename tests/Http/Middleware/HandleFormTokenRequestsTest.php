@@ -45,6 +45,8 @@ it('throws GraphQL spec conforming errors on GraphQL requests', function (array 
 
     expect(fn () => $sut->handle($request, fn () => 'bailed out'))
         ->toThrow(Error::class, 'Internal Server Error');
+    // TODO: Fix incomplete test
+    $this->markTestIncomplete('check for existence of new token header (does not work yet!)');
 })
 ->with('config')
 ->with('tokens');
