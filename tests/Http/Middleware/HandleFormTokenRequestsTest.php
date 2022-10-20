@@ -1,8 +1,10 @@
 <?php
 
+use GraphQL\Error\Error;
 use Hettiger\Honeypot\FormToken;
 use Hettiger\Honeypot\Http\Middleware\HandleFormTokenRequests;
 use function Hettiger\Honeypot\resolveByType;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use function Pest\Laravel\travel;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,11 +34,20 @@ it('aborts when an invalid or empty token is present in the header', function (a
         );
 })
 ->with('config')
-->with([
-    'empty token' => fn () => '',
-    'invalid token' => fn () => 'invalid-token',
-    'valid token' => fn () => FormToken::make()->persisted()->id,
-]);
+->with('tokens');
+
+it('throws GraphQL spec conforming errors on GraphQL requests', function (array $config, string $token) {
+    $sut = resolveByType(HandleFormTokenRequests::class);
+
+    $request = makeRequest();
+    $request->setRouteResolver(fn () => Route::getRoutes()->getByName('graphql'));
+    $request->headers->set($config['header'], $token);
+
+    expect(fn () => $sut->handle($request, fn () => 'bailed out'))
+        ->toThrow(Error::class, 'Internal Server Error');
+})
+->with('config')
+->with('tokens');
 
 it('bails out when a valid token is present in the header', function (array $config) {
     $sut = resolveByType(HandleFormTokenRequests::class);

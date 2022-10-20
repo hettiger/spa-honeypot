@@ -3,6 +3,7 @@
 namespace Hettiger\Honeypot\Http\Middleware;
 
 use Closure;
+use GraphQL\Error\Error as GraphQLError;
 use Hettiger\Honeypot\FormToken;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,14 +23,25 @@ class HandleFormTokenRequests
             return $next($request);
         }
 
-        // TODO: This abort response does not conform to GraphQL spec
-        abort_unless(
-            $this->token()->isValid(),
-            Response::HTTP_INTERNAL_SERVER_ERROR,
-            headers: $this->newTokenHeader()
-        );
+        if ($this->isGraphQLRequest()) {
+            throw_unless(
+                $this->token()->isValid(),
+                new GraphQLError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR])
+            );
+        } else {
+            abort_unless(
+                $this->token()->isValid(),
+                Response::HTTP_INTERNAL_SERVER_ERROR,
+                headers: $this->newTokenHeader()
+            );
+        }
 
         return $this->responseWithNewTokenHeader($next($request));
+    }
+
+    protected function isGraphQLRequest(): bool
+    {
+        return request()->routeIs('graphql');
     }
 
     protected function token(): FormToken

@@ -1,7 +1,5 @@
 <?php
 
-dataset('config', function () {
-    return [
-        'config' => fn () => config('spa-honeypot'),
-    ];
-});
+dataset('config', fn () => [
+    'config' => fn () => config('spa-honeypot'),
+]);
