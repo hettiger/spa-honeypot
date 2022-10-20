@@ -41,7 +41,6 @@ GRAPHQL;
             GraphQLContext $context,
             ResolveInfo $resolveInfo
         ) use ($resolver) {
-            // TODO: Needs test
             throw_unless(
                 request()->hasHeader($this->config['header']),
                 new Error(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR])
