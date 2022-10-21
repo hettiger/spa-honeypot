@@ -1,7 +1,7 @@
 <?php
 
 dataset('query', fn () => [
-'query' => /** @lang GraphQL */ <<<'GRAPHQL'
+    'query' => /** @lang GraphQL */ <<<'GRAPHQL'
 {
     fieldFake
 }
