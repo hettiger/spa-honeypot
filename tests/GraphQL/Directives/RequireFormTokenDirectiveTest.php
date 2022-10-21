@@ -12,40 +12,31 @@ uses(
 
 beforeEach(function () {
     $this->setUpTestSchema();
-
-    /** @noinspection GraphQLUnresolvedReference */
-    $this->schema = /** @lang GraphQL */ <<<'GRAPHQL'
-type Query {
-    fieldFake: String @requireFormToken @mock
-}
-GRAPHQL;
 });
 
-it('bails out when header is present', function (array $config) {
+it('bails out when header is present', function (array $config, string $schema, string $query) {
+    $this->schema = $schema;
     $this->mockResolver()->willReturn('OK');
 
     /** @noinspection GraphQLUnresolvedReference */
-    $this->graphQL(
-/** @lang GraphQL */ <<<'GRAPHQL'
-{
-    fieldFake
-}
-GRAPHQL,
-        headers: [$config['header'] => '']
-    )->assertExactJson([
-        'data' => [
-            'fieldFake' => 'OK',
-        ],
-    ]);
-})->with('config');
+    $this->graphQL($query, headers: [$config['header'] => ''])
+        ->assertExactJson([
+            'data' => [
+                'fieldFake' => 'OK',
+            ],
+        ]);
+})
+->with('config')
+->with('schema')
+->with('query');
 
-it('throws when header is missing', function () {
+it('throws when header is missing', function (string $schema, string $query) {
+    $this->schema = $schema;
     $this->mockResolverExpects($this->never());
 
     /** @noinspection GraphQLUnresolvedReference */
-    $this->graphQL(/** @lang GraphQL */ <<<'GRAPHQL'
-{
-    fieldFake
-}
-GRAPHQL)->assertGraphQLErrorMessage('Internal Server Error');
-});
+    $this->graphQL($query)
+        ->assertGraphQLErrorMessage('Internal Server Error');
+})
+->with('schema')
+->with('query');
