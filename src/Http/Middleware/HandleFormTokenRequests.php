@@ -3,7 +3,6 @@
 namespace Hettiger\Honeypot\Http\Middleware;
 
 use Closure;
-use GraphQL\Error\Error as GraphQLError;
 use Hettiger\Honeypot\FormToken;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,18 +22,17 @@ class HandleFormTokenRequests
             return $next($request);
         }
 
-        if ($this->isGraphQLRequest()) {
-            throw_unless(
-                $this->token()->isValid(),
-                new GraphQLError(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR])
-            );
-        } else {
-            abort_unless(
-                $this->token()->isValid(),
-                Response::HTTP_INTERNAL_SERVER_ERROR,
-                headers: $this->newTokenHeader()
-            );
-        }
+        abort_unless(
+            $this->token()->isValid(),
+            $this->isGraphQLRequest()
+                ? $this->responseWithNewTokenHeader([
+                    'errors' => [
+                        'message' => Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR],
+                    ],
+                ])
+                : Response::HTTP_INTERNAL_SERVER_ERROR,
+            headers: $this->newTokenHeader()
+        );
 
         return $this->responseWithNewTokenHeader($next($request));
     }

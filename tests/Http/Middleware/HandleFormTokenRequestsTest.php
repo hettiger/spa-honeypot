@@ -1,9 +1,9 @@
 <?php
 
-use GraphQL\Error\Error;
 use Hettiger\Honeypot\FormToken;
 use Hettiger\Honeypot\Http\Middleware\HandleFormTokenRequests;
 use function Hettiger\Honeypot\resolveByType;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use function Pest\Laravel\travel;
@@ -44,9 +44,10 @@ it('throws GraphQL spec conforming errors on GraphQL requests', function (array 
     $request->headers->set($config['header'], $token);
 
     expect(fn () => $sut->handle($request, fn () => 'bailed out'))
-        ->toThrow(Error::class, 'Internal Server Error');
-    // TODO: Fix incomplete test
-    $this->markTestIncomplete('check for existence of new token header (does not work yet!)');
+        ->toThrow(fn (HttpResponseException $exception) => expect($exception->getResponse()->getContent())
+            ->toEqual(json_encode(['errors' => ['message' => 'Internal Server Error']]))
+            ->and($exception->getResponse()->headers->contains($config['header'], Str::uuid()->toString()))
+        );
 })
 ->with('config')
 ->with('tokens');
