@@ -18,13 +18,7 @@ class Honeypot
     public function __construct(
         protected array $config,
     ) {
-        $this->makeFormTokenErrorResponse = fn (bool $isGraphQLRequest) => $isGraphQLRequest
-            ? [
-                'errors' => [
-                    ['message' => Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR]],
-                ],
-            ]
-            : Response::HTTP_INTERNAL_SERVER_ERROR;
+        $this->makeFormTokenErrorResponse = resolveByType(FormTokenErrorResponseFactory::class)(...);
     }
 
     public function respondToFormTokenErrorsUsing(Closure $makeResponse)
