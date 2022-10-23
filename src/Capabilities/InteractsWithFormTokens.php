@@ -18,6 +18,6 @@ trait InteractsWithFormTokens
 
     protected function tokenHeaderName(): string
     {
-        return $this->config['header'];
+        return config('spa-honeypot.header');
     }
 }

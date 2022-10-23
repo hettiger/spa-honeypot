@@ -13,11 +13,6 @@ class HandleFormTokenRequests
     use RecognizesFormTokenRequests;
     use RespondsWithNewFormToken;
 
-    public function __construct(
-        protected array $config,
-    ) {
-    }
-
     public function handle(Request $request, Closure $next)
     {
         if (! $this->isFormTokenRequest()) {

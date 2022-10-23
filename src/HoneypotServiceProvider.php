@@ -3,7 +3,6 @@
 namespace Hettiger\Honeypot;
 
 use Hettiger\Honeypot\Commands\HoneypotCommand;
-use Hettiger\Honeypot\GraphQL\Directives\RequireFormTokenDirective;
 use Hettiger\Honeypot\Http\Middleware\HandleFormTokenRequests;
 use Hettiger\Honeypot\Http\Middleware\RequireFormToken;
 use Illuminate\Events\Dispatcher;
@@ -48,9 +47,6 @@ class HoneypotServiceProvider extends PackageServiceProvider
         $this->app->when([
             Honeypot::class,
             FormToken::class,
-            HandleFormTokenRequests::class,
-            RequireFormToken::class,
-            RequireFormTokenDirective::class,
         ])
             ->needs('$config')
             ->give(config('spa-honeypot'));

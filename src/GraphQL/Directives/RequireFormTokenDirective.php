@@ -13,11 +13,6 @@ final class RequireFormTokenDirective extends BaseDirective implements FieldMidd
 {
     use RecognizesFormTokenRequests;
 
-    public function __construct(
-        protected array $config
-    ) {
-    }
-
     public static function definition(): string
     {
         return /** @lang GraphQL */ <<<'GRAPHQL'

@@ -11,11 +11,6 @@ class RequireFormToken
 {
     use RecognizesFormTokenRequests;
 
-    public function __construct(
-        protected array $config,
-    ) {
-    }
-
     public function handle(Request $request, Closure $next)
     {
         abort_unless(
