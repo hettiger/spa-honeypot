@@ -5,6 +5,7 @@ namespace Hettiger\Honeypot;
 use Closure;
 use Hettiger\Honeypot\Capabilities\RecognizesGraphQLRequests;
 use Hettiger\Honeypot\Capabilities\RespondsWithNewFormToken;
+use Illuminate\Contracts\Support\Responsable;
 use Symfony\Component\HttpFoundation\Response;
 
 class Honeypot
@@ -12,37 +13,28 @@ class Honeypot
     use RecognizesGraphQLRequests;
     use RespondsWithNewFormToken;
 
-    protected ?Closure $makeFormTokenErrorResponse = null;
+    protected Closure $makeFormTokenErrorResponse;
 
     public function __construct(
         protected array $config,
     ) {
+        $this->makeFormTokenErrorResponse = fn (bool $isGraphQLRequest) => $isGraphQLRequest
+            ? [
+                'errors' => [
+                    'message' => Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR],
+                ]
+            ]
+            : Response::HTTP_INTERNAL_SERVER_ERROR;
     }
 
     public function respondToFormTokenErrorsUsing(Closure $makeResponse) {
         $this->makeFormTokenErrorResponse = $makeResponse;
     }
 
-    public function formTokenErrorResponse($withNewToken = true)
+    public function formTokenErrorResponse($withNewToken = true): Response|Responsable|int
     {
-        if ($this->makeFormTokenErrorResponse) {
-            return $this->response(
-                ($this->makeFormTokenErrorResponse)($this->isGraphQLRequest()),
-                $withNewToken
-            );
-        }
+        $response = ($this->makeFormTokenErrorResponse)($this->isGraphQLRequest());
 
-        if ($this->isGraphQLRequest()) {
-            return $this->response(
-                [
-                    'errors' => [
-                        'message' => Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR],
-                    ],
-                ],
-                $withNewToken
-            );
-        }
-
-        return Response::HTTP_INTERNAL_SERVER_ERROR;
+        return is_int($response) ? $response : $this->response($response, $withNewToken);
     }
 }
