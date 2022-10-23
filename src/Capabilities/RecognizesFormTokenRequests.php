@@ -1,16 +1,13 @@
 <?php
 
-namespace Hettiger\Honeypot\Http\Middleware;
+namespace Hettiger\Honeypot\Capabilities;
 
 trait RecognizesFormTokenRequests
 {
+    use InteractsWithFormTokens;
+
     protected function isFormTokenRequest(): bool
     {
         return request()->headers->has($this->tokenHeaderName());
-    }
-
-    protected function tokenHeaderName(): string
-    {
-        return $this->config['header'];
     }
 }

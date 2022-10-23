@@ -2,14 +2,23 @@
 
 use Hettiger\Honeypot\Tests\TestCase;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use function Pest\Laravel\swap;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 uses(TestCase::class)->in(__DIR__);
 
-function makeRequest(): Request
+function withGraphQLRequest(?Request $request = null): Request
 {
-    $request = new Request();
+    $request = withRequest($request);
+    $request->setRouteResolver(fn () => Route::getRoutes()->getByName('graphql'));
+
+    return $request;
+}
+
+function withRequest(?Request $request = null): Request
+{
+    $request = $request ?? request();
     swap('request', $request);
 
     return $request;

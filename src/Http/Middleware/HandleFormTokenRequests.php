@@ -3,13 +3,15 @@
 namespace Hettiger\Honeypot\Http\Middleware;
 
 use Closure;
-use Hettiger\Honeypot\FormToken;
+use Hettiger\Honeypot\Capabilities\RecognizesFormTokenRequests;
+use Hettiger\Honeypot\Capabilities\RespondsWithNewFormToken;
+use Hettiger\Honeypot\Facades\Honeypot;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class HandleFormTokenRequests
 {
     use RecognizesFormTokenRequests;
+    use RespondsWithNewFormToken;
 
     public function __construct(
         protected array $config,
@@ -24,47 +26,10 @@ class HandleFormTokenRequests
 
         abort_unless(
             $this->token()->isValid(),
-            $this->isGraphQLRequest()
-                ? $this->responseWithNewTokenHeader([
-                    'errors' => [
-                        'message' => Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR],
-                    ],
-                ])
-                : Response::HTTP_INTERNAL_SERVER_ERROR,
+            Honeypot::formTokenErrorResponse(),
             headers: $this->newTokenHeader()
         );
 
-        return $this->responseWithNewTokenHeader($next($request));
-    }
-
-    protected function isGraphQLRequest(): bool
-    {
-        return request()->routeIs('graphql');
-    }
-
-    protected function token(): FormToken
-    {
-        return FormToken::fromId($this->tokenId());
-    }
-
-    protected function tokenId(): ?string
-    {
-        return request()->headers->get($this->tokenHeaderName());
-    }
-
-    protected function newTokenHeader(): array
-    {
-        return [$this->tokenHeaderName() => FormToken::make()->persisted()->id];
-    }
-
-    protected function responseWithNewTokenHeader(mixed $response): Response
-    {
-        if (! ($response instanceof Response)) {
-            $response = response($response);
-        }
-
-        $response->headers->add($this->newTokenHeader());
-
-        return $response;
+        return $this->response($next($request));
     }
 }

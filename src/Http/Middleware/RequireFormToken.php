@@ -3,8 +3,9 @@
 namespace Hettiger\Honeypot\Http\Middleware;
 
 use Closure;
+use Hettiger\Honeypot\Capabilities\RecognizesFormTokenRequests;
+use Hettiger\Honeypot\Facades\Honeypot;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class RequireFormToken
 {
@@ -19,7 +20,7 @@ class RequireFormToken
     {
         abort_unless(
             $this->isFormTokenRequest(),
-            Response::HTTP_INTERNAL_SERVER_ERROR,
+            Honeypot::formTokenErrorResponse(false),
         );
 
         return $next($request);

@@ -4,7 +4,6 @@ use Hettiger\Honeypot\FormToken;
 use Hettiger\Honeypot\Http\Middleware\HandleFormTokenRequests;
 use function Hettiger\Honeypot\resolveByType;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use function Pest\Laravel\travel;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,16 +14,16 @@ beforeEach(function () {
 
 it('bails out when header is missing', function () {
     $sut = resolveByType(HandleFormTokenRequests::class);
+    $request = withRequest();
 
-    $response = $sut->handle(makeRequest(), fn () => 'bailed out');
+    $response = $sut->handle($request, fn () => 'bailed out');
 
     expect($response)->toEqual('bailed out');
 });
 
 it('aborts when an invalid or empty token is present in the header', function (array $config, string $token) {
     $sut = resolveByType(HandleFormTokenRequests::class);
-
-    $request = makeRequest();
+    $request = withRequest();
     $request->headers->set($config['header'], $token);
 
     expect(fn () => $sut->handle($request, fn () => 'bailed out'))
@@ -38,9 +37,7 @@ it('aborts when an invalid or empty token is present in the header', function (a
 
 it('throws GraphQL spec conforming errors on GraphQL requests', function (array $config, string $token) {
     $sut = resolveByType(HandleFormTokenRequests::class);
-
-    $request = makeRequest();
-    $request->setRouteResolver(fn () => Route::getRoutes()->getByName('graphql'));
+    $request = withGraphQLRequest();
     $request->headers->set($config['header'], $token);
 
     expect(fn () => $sut->handle($request, fn () => 'bailed out'))
@@ -54,8 +51,7 @@ it('throws GraphQL spec conforming errors on GraphQL requests', function (array 
 
 it('bails out when a valid token is present in the header', function (array $config) {
     $sut = resolveByType(HandleFormTokenRequests::class);
-
-    $request = makeRequest();
+    $request = withRequest();
     $request->headers->set($config['header'], FormToken::make()->persisted()->id);
     travel($config['min_age']->totalSeconds)->seconds();
 

@@ -6,8 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 it('bails out when header is present', function (array $config) {
     $sut = resolveByType(RequireFormToken::class);
-
-    $request = makeRequest();
+    $request = withRequest();
     $request->headers->set($config['header'], '');
 
     $response = $sut->handle($request, fn () => 'bailed out');
@@ -17,7 +16,8 @@ it('bails out when header is present', function (array $config) {
 
 it('aborts when header is missing', function () {
     $sut = resolveByType(RequireFormToken::class);
+    $request = withRequest();
 
-    expect(fn () => $sut->handle(makeRequest(), fn () => 'bailed out'))
+    expect(fn () => $sut->handle($request, fn () => 'bailed out'))
         ->toAbortWith(Response::HTTP_INTERNAL_SERVER_ERROR);
 });

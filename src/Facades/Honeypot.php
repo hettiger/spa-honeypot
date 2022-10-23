@@ -5,7 +5,7 @@ namespace Hettiger\Honeypot\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Hettiger\Honeypot\Honeypot
+ * @mixin \Hettiger\Honeypot\Honeypot
  */
 class Honeypot extends Facade
 {
