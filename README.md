@@ -132,6 +132,8 @@ class AppServiceProvider extends ServiceProvider
 }
 ```
 
+> You don't have to worry about adding the form token header yourself. It'll be added for you automatically.
+
 ## Testing
 
 ```bash
