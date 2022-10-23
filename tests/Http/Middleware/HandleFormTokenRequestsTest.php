@@ -42,7 +42,7 @@ it('throws GraphQL spec conforming errors on GraphQL requests', function (array 
 
     expect(fn () => $sut->handle($request, fn () => 'bailed out'))
         ->toThrow(fn (HttpResponseException $exception) => expect($exception->getResponse()->getContent())
-            ->toEqual(json_encode(['errors' => ['message' => 'Internal Server Error']]))
+            ->toEqual(json_encode(['errors' => [['message' => 'Internal Server Error']]]))
             ->and($exception->getResponse()->headers->contains($config['header'], Str::uuid()->toString()))
         );
 })

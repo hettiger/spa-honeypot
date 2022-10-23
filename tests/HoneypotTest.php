@@ -21,7 +21,7 @@ test(
         expect($response->getStatusCode())
             ->toBe(200)
             ->and($response->getContent())
-            ->toEqual(json_encode(['errors' => ['message' => 'Internal Server Error']]))
+            ->toEqual(json_encode(['errors' => [['message' => 'Internal Server Error']]]))
             ->and($response->headers->contains($config['header'], Str::uuid()->toString()))
             ->toBeTrue();
     })

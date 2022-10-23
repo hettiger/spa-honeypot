@@ -21,13 +21,14 @@ class Honeypot
         $this->makeFormTokenErrorResponse = fn (bool $isGraphQLRequest) => $isGraphQLRequest
             ? [
                 'errors' => [
-                    'message' => Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR],
-                ]
+                    ['message' => Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR]],
+                ],
             ]
             : Response::HTTP_INTERNAL_SERVER_ERROR;
     }
 
-    public function respondToFormTokenErrorsUsing(Closure $makeResponse) {
+    public function respondToFormTokenErrorsUsing(Closure $makeResponse)
+    {
         $this->makeFormTokenErrorResponse = $makeResponse;
     }
 
