@@ -18,7 +18,7 @@ class Honeypot
     public function __construct(
         protected array $config,
     ) {
-        $this->makeFormTokenErrorResponse = resolveByType(FormTokenErrorResponseFactory::class)(...);
+        $this->makeFormTokenErrorResponse = resolve($this->config['form_token_error_response_factory'])(...);
     }
 
     public function respondToFormTokenErrorsUsing(Closure $makeResponse)
