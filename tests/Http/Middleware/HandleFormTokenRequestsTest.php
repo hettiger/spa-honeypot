@@ -1,5 +1,6 @@
 <?php
 
+use Hettiger\Honeypot\Facades\Honeypot;
 use Hettiger\Honeypot\FormToken;
 use Hettiger\Honeypot\Http\Middleware\HandleFormTokenRequests;
 use function Hettiger\Honeypot\resolveByType;
@@ -7,6 +8,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Str;
 use function Pest\Laravel\travel;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 beforeEach(function () {
     Str::freezeUuids();
@@ -35,7 +37,7 @@ it('aborts when an invalid or empty token is present in the header', function (a
 ->with('config')
 ->with('tokens');
 
-it('throws GraphQL spec conforming errors on GraphQL requests', function (array $config, string $token) {
+it('aborts with GraphQL spec conforming errors on GraphQL requests', function (array $config, string $token) {
     $sut = resolveByType(HandleFormTokenRequests::class);
     $request = withGraphQLRequest();
     $request->headers->set($config['header'], $token);
@@ -44,6 +46,22 @@ it('throws GraphQL spec conforming errors on GraphQL requests', function (array 
         ->toThrow(fn (HttpResponseException $exception) => expect($exception->getResponse()->getContent())
             ->toEqual(json_encode(['errors' => [['message' => 'Internal Server Error']]]))
             ->and($exception->getResponse()->headers->contains($config['header'], Str::uuid()->toString()))
+        );
+})
+->with('config')
+->with('tokens');
+
+it('aborts with custom error response when present', function (array $config, string $token) {
+    $sut = resolveByType(HandleFormTokenRequests::class);
+    $request = withRequest();
+    $request->headers->set($config['header'], $token);
+    $expectedResponse = response('response fake');
+    Honeypot::respondToFormTokenErrorsUsing(fn () => $expectedResponse);
+
+    expect(fn () => $sut->handle($request, fn () => 'bailed out'))
+        ->toAbortWithResponse(
+            $expectedResponse,
+            fn (ResponseHeaderBag $bag) => $bag->contains($config['header'], Str::uuid()->toString())
         );
 })
 ->with('config')

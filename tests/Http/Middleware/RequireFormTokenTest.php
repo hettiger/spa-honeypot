@@ -1,5 +1,6 @@
 <?php
 
+use Hettiger\Honeypot\Facades\Honeypot;
 use Hettiger\Honeypot\Http\Middleware\RequireFormToken;
 use function Hettiger\Honeypot\resolveByType;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,4 +21,14 @@ it('aborts when header is missing', function () {
 
     expect(fn () => $sut->handle($request, fn () => 'bailed out'))
         ->toAbortWith(Response::HTTP_INTERNAL_SERVER_ERROR);
+});
+
+it('aborts using custom response factory when available', function () {
+    $sut = resolveByType(RequireFormToken::class);
+    $request = withRequest();
+    $expectedResponse = response('response fake');
+    Honeypot::respondToFormTokenErrorsUsing(fn () => $expectedResponse);
+
+    expect(fn () => $sut->handle($request, fn () => 'bailed out'))
+        ->toAbortWithResponse($expectedResponse);
 });

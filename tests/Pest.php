@@ -1,9 +1,11 @@
 <?php
 
 use Hettiger\Honeypot\Tests\TestCase;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use function Pest\Laravel\swap;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 uses(TestCase::class)->in(__DIR__);
@@ -32,5 +34,15 @@ expect()->extend('toAbortWith', function (int $statusCode, string $message = '',
             ->toEqual($message)
             ->and($exception->getHeaders())
             ->toEqual($headers)
+    );
+});
+
+expect()->extend('toAbortWithResponse', function (Response $response, ?Closure $headers = null) {
+    $headers = $headers ?? fn () => true;
+    $this->toThrow(
+        fn (HttpResponseException $exception) => expect($exception->getResponse())
+            ->toBe($response)
+            ->and($headers($exception->getResponse()->headers))
+            ->toBeTruthy()
     );
 });
