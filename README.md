@@ -31,7 +31,14 @@ php artisan vendor:publish --tag="spa-honeypot-config"
 This is the contents of the published config file:
 
 ```php
+use Carbon\CarbonInterval;
+
 return [
+    'header' => 'spa-form-token',
+    'cache_prefix' => 'spa-form-token-',
+    'min_age' => CarbonInterval::seconds(3),
+    'max_age' => CarbonInterval::minutes(15),
+    'form_token_error_response_factory' => \Hettiger\Honeypot\FormTokenErrorResponseFactory::class,
 ];
 ```
 
@@ -91,6 +98,39 @@ extend type Mutation {
 ```
 
 3. Use one of the corresponding frontend libraries to make form token requests
+
+### Customizing Responses
+
+You may provide a custom form token error response factory using the config:
+
+```php
+return [
+    // …
+    
+    // provide a invokable class to be used as the form token error response factory here
+    'form_token_error_response_factory' => \Hettiger\Honeypot\FormTokenErrorResponseFactory::class,
+];
+```
+
+Alternatively you can provide a simple `Closure` anywhere in your application:
+
+```php
+use Hettiger\Honeypot\Facades\Honeypot;
+use Illuminate\Support\ServiceProvider;
+
+class AppServiceProvider extends ServiceProvider
+{
+    // …
+
+    public function boot()
+    {
+        Honeypot::respondToFormTokenErrorsUsing(fn (bool $isGraphQLRequest) => $isGraphQLRequest
+            ? ['errors' => [['message' => 'Whoops, something went wrong …']]]
+            : 'Whoops, something went wrong …'
+        );
+    }
+}
+```
 
 ## Testing
 
