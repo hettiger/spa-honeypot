@@ -36,7 +36,7 @@ it('throws when header is missing', function (string $schema, string $query) {
 
     /** @noinspection GraphQLUnresolvedReference */
     $this->graphQL($query)
-        ->assertGraphQLErrorMessage('Internal Server Error');
+        ->assertGraphQLErrorMessage('Internal server error');
 })
 ->with('schema')
 ->with('query');

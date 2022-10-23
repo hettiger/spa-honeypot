@@ -3,16 +3,18 @@
 namespace Hettiger\Honeypot\GraphQL\Directives;
 
 use Closure;
-use GraphQL\Error\Error;
 use GraphQL\Type\Definition\ResolveInfo;
+use Hettiger\Honeypot\Capabilities\RecognizesFormTokenRequests;
+use Hettiger\Honeypot\Facades\Honeypot;
 use Nuwave\Lighthouse\Schema\Directives\BaseDirective;
 use Nuwave\Lighthouse\Schema\Values\FieldValue;
 use Nuwave\Lighthouse\Support\Contracts\FieldMiddleware;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
-use Symfony\Component\HttpFoundation\Response;
 
 final class RequireFormTokenDirective extends BaseDirective implements FieldMiddleware
 {
+    use RecognizesFormTokenRequests;
+
     public function __construct(
         protected array $config
     ) {
@@ -41,9 +43,9 @@ GRAPHQL;
             GraphQLContext $context,
             ResolveInfo $resolveInfo
         ) use ($resolver) {
-            throw_unless(
-                request()->hasHeader($this->config['header']),
-                new Error(Response::$statusTexts[Response::HTTP_INTERNAL_SERVER_ERROR])
+            abort_unless(
+                $this->isFormTokenRequest(),
+                Honeypot::formTokenErrorResponse(false),
             );
 
             return $resolver($root, $args, $context, $resolveInfo);
