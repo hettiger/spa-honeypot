@@ -4,6 +4,7 @@ use Hettiger\Honeypot\Facades\Honeypot;
 use Hettiger\Honeypot\FormToken;
 use Hettiger\Honeypot\Http\Middleware\HandleFormTokenRequests;
 use function Hettiger\Honeypot\resolveByType;
+use Hettiger\Honeypot\Tests\Fakes\ResponsableFake;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Str;
 use function Pest\Laravel\travel;
@@ -14,14 +15,19 @@ beforeEach(function () {
     Str::freezeUuids();
 });
 
-it('bails out when header is missing', function () {
+it('bails out when header is missing', function (array $config) {
     $sut = resolveByType(HandleFormTokenRequests::class);
     $request = withRequest();
+    $expectedResponse = response('bailed out');
 
-    $response = $sut->handle($request, fn () => 'bailed out');
+    $actualResponse = $sut->handle($request, fn () => $expectedResponse);
 
-    expect($response)->toEqual('bailed out');
-});
+    expect($actualResponse)
+        ->toBe($expectedResponse)
+        ->and($actualResponse->headers->has($config['header']))
+        ->toBeFalse();
+})
+->with('config');
 
 it('aborts when an invalid or empty token is present in the header', function (array $config, string $token) {
     $sut = resolveByType(HandleFormTokenRequests::class);
@@ -67,7 +73,7 @@ it('aborts with custom error response when present', function (array $config, st
 ->with('config')
 ->with('tokens');
 
-it('bails out when a valid token is present in the header', function (array $config) {
+it('adds a new token to the response when a valid token is present in the header', function (array $config) {
     $sut = resolveByType(HandleFormTokenRequests::class);
     $request = withRequest();
     $request->headers->set($config['header'], FormToken::make()->persisted()->id);
@@ -79,5 +85,20 @@ it('bails out when a valid token is present in the header', function (array $con
         ->toEqual('bailed out')
         ->and($response->headers->contains($config['header'], Str::uuid()->toString()))
         ->toBeTrue();
+})
+->with('config');
+
+it("can add new token header even if it has to deal with responsable's", function (array $config) {
+    $sut = resolveByType(HandleFormTokenRequests::class);
+    $request = withRequest();
+    $request->headers->set($config['header'], FormToken::make()->persisted()->id);
+    $expectedResponse = response('response fake');
+    travel($config['min_age']->totalSeconds)->seconds();
+
+    $actualResponse = $sut->handle($request, fn () => new ResponsableFake($expectedResponse));
+
+    expect($actualResponse)
+        ->toBe($expectedResponse)
+        ->and($actualResponse->headers->contains($config['header'], Str::uuid()->toString()));
 })
 ->with('config');
