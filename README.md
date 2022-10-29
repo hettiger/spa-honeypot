@@ -54,11 +54,14 @@ php artisan vendor:publish --tag="spa-honeypot-views"
 
 ### REST API
 
-1. Add the `form.token` middleware group to a forms target route
+1. Add the `form.honeypot`, `form.token`  or `form` middleware to a forms target route
 
 ```php
-Route::post('form', fn () => 'OK')->middleware('form.token');
+Route::post('form', fn () => 'OK')->middleware('form');
 ```
+
+> The `form` middleware group simply combines `form.honeypot` and `form.token` so you don't have to.
+> Using just `form.token` protection without the `form.honeypot` middleware or vise versa is supported. 
 
 2. Use one of the corresponding frontend libraries to make form token requests 
 

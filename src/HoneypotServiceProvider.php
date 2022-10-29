@@ -3,6 +3,7 @@
 namespace Hettiger\Honeypot;
 
 use Hettiger\Honeypot\Commands\HoneypotCommand;
+use Hettiger\Honeypot\Http\Middleware\AbortWhenHoneypotIsFilled;
 use Hettiger\Honeypot\Http\Middleware\HandleFormTokenRequests;
 use Hettiger\Honeypot\Http\Middleware\RequireFormToken;
 use Illuminate\Events\Dispatcher;
@@ -35,13 +36,19 @@ class HoneypotServiceProvider extends PackageServiceProvider
         $this->registerGraphQLNamespaces();
     }
 
+    /**
+     * TODO: Make middleware registration optional / configurable
+     * TODO: Cover middleware groups / aliases and usage docs with tests
+     */
     protected function registerMiddleware(): void
     {
         $router = resolveByType(Router::class);
 
+        $router->aliasMiddleware('form.honeypot', AbortWhenHoneypotIsFilled::class);
         $router->aliasMiddleware('form.token.handle', HandleFormTokenRequests::class);
         $router->aliasMiddleware('form.token.require', RequireFormToken::class);
         $router->middlewareGroup('form.token', ['form.token.handle', 'form.token.require']);
+        $router->middlewareGroup('form', ['form.honeypot', 'form.token']);
     }
 
     protected function registerGraphQLNamespaces()
