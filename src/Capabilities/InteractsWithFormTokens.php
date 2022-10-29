@@ -2,6 +2,7 @@
 
 namespace Hettiger\Honeypot\Capabilities;
 
+use function Hettiger\Honeypot\config;
 use Hettiger\Honeypot\FormToken;
 
 trait InteractsWithFormTokens
@@ -18,6 +19,6 @@ trait InteractsWithFormTokens
 
     protected function tokenHeaderName(): string
     {
-        return config('spa-honeypot.header');
+        return config('header');
     }
 }
