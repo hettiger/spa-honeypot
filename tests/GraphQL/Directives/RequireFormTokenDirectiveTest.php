@@ -1,5 +1,6 @@
 <?php
 
+use function Hettiger\Honeypot\config;
 use Hettiger\Honeypot\Facades\Honeypot;
 use Nuwave\Lighthouse\Testing\MakesGraphQLRequests;
 use Nuwave\Lighthouse\Testing\MocksResolvers;
@@ -15,19 +16,18 @@ beforeEach(function () {
     $this->setUpTestSchema();
 });
 
-it('bails out when header is present', function (array $config, string $schema, string $query) {
+it('bails out when header is present', function (string $schema, string $query) {
     $this->schema = $schema;
     $this->mockResolver()->willReturn('OK');
 
     /** @noinspection GraphQLUnresolvedReference */
-    $this->graphQL($query, headers: [$config['header'] => ''])
+    $this->graphQL($query, headers: [config('header') => ''])
         ->assertExactJson([
             'data' => [
                 'fieldFake' => 'OK',
             ],
         ]);
 })
-->with('config')
 ->with('schema')
 ->with('query');
 

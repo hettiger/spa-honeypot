@@ -1,5 +1,6 @@
 <?php
 
+use function Hettiger\Honeypot\config;
 use Hettiger\Honeypot\Facades\Honeypot;
 use Illuminate\Support\Str;
 
@@ -14,7 +15,7 @@ test('formTokenErrorResponse returns HTTP status code 500', function () {
 
 test(
     'formTokenErrorResponse returns GraphQL error response on GraphQL requests',
-    function (array $config) {
+    function () {
         withGraphQLRequest();
         $response = Honeypot::formTokenErrorResponse();
 
@@ -22,14 +23,14 @@ test(
             ->toBe(200)
             ->and($response->getContent())
             ->toEqual(json_encode(['errors' => [['message' => 'Internal Server Error']]]))
-            ->and($response->headers->contains($config['header'], Str::uuid()->toString()))
+            ->and($response->headers->contains(config('header'), Str::uuid()->toString()))
             ->toBeTrue();
-    })
-->with('config');
+    }
+);
 
 test(
     'formTokenErrorResponse returns custom response when available',
-    function (array $config, bool $withNewToken, bool $isGraphQLRequest) {
+    function (bool $withNewToken, bool $isGraphQLRequest) {
         $isGraphQLRequest ? withGraphQLRequest() : withRequest();
         $expectedResponse = response('response fake');
         $expectedGraphQLResponse = response('GraphQL response fake');
@@ -43,11 +44,10 @@ test(
 
         expect($actualResponse)
             ->toBe($isGraphQLRequest ? $expectedGraphQLResponse : $expectedResponse)
-            ->and($actualResponse->headers->contains($config['header'], Str::uuid()->toString()))
+            ->and($actualResponse->headers->contains(config('header'), Str::uuid()->toString()))
             ->toBe($withNewToken);
     }
 )
-->with('config')
 ->with([
     'new token' => [true, false],
     'without token' => [false, false],

@@ -31,7 +31,6 @@ class FormToken
     }
 
     public function __construct(
-        protected array $config,
         ?string $id = null,
     ) {
         $this->id = $id ?? Str::uuid();
@@ -42,7 +41,7 @@ class FormToken
         Cache::put(
             $this->cacheKey(),
             now()->getTimestamp(),
-            $this->config['max_age'],
+            config('max_age'),
         );
 
         return $this;
@@ -62,13 +61,13 @@ class FormToken
 
         /** @var ?int $createdAt */
         $createdAt = Cache::pull($this->cacheKey());
-        $minAge = $this->config['min_age'];
+        $minAge = config('min_age');
 
         return $createdAt !== null && Carbon::createFromTimestamp($createdAt)->add($minAge)->lessThan(now());
     }
 
     protected function cacheKey(): string
     {
-        return $this->config['cache_prefix'].$this->id;
+        return config('cache_prefix').$this->id;
     }
 }

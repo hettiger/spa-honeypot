@@ -27,29 +27,12 @@ class HoneypotServiceProvider extends PackageServiceProvider
             ->hasCommand(HoneypotCommand::class);
     }
 
-    public function register()
-    {
-        parent::register();
-
-        $this->provideConfig();
-    }
-
     public function boot()
     {
         parent::boot();
 
         $this->registerMiddleware();
         $this->registerGraphQLNamespaces();
-    }
-
-    protected function provideConfig(): void
-    {
-        $this->app->when([
-            Honeypot::class,
-            FormToken::class,
-        ])
-            ->needs('$config')
-            ->give(config('spa-honeypot'));
     }
 
     protected function registerMiddleware(): void
