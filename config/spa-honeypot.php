@@ -3,6 +3,7 @@
 use Carbon\CarbonInterval;
 
 return [
+    'field' => 'honey',
     'header' => 'spa-form-token',
     'cache_prefix' => 'spa-form-token-',
     'min_age' => CarbonInterval::seconds(3),
