@@ -39,7 +39,8 @@ return [
     'cache_prefix' => 'spa-form-token-',
     'min_age' => CarbonInterval::seconds(3),
     'max_age' => CarbonInterval::minutes(15),
-    'form_token_error_response_factory' => \Hettiger\Honeypot\FormTokenErrorResponseFactory::class,
+    'honeypot_error_response_factory' => \Hettiger\Honeypot\ErrorResponseFactory::class,
+    'form_token_error_response_factory' => \Hettiger\Honeypot\ErrorResponseFactory::class,
 ];
 ```
 
@@ -89,16 +90,21 @@ extend type Mutation {
 
 ### Customizing Responses
 
-You may provide a custom form token error response factory using the config:
+You may provide custom error response factories using the config:
 
 ```php
 return [
     // …
     
+    // provide a invokable class to be used as the honeypot error response factory here
+    'honeypot_error_response_factory' => \Hettiger\Honeypot\ErrorResponseFactory::class,
+    
     // provide a invokable class to be used as the form token error response factory here
-    'form_token_error_response_factory' => \Hettiger\Honeypot\FormTokenErrorResponseFactory::class,
+    'form_token_error_response_factory' => \Hettiger\Honeypot\ErrorResponseFactory::class,
 ];
 ```
+
+> See `\Hettiger\Honeypot\ErrorResponseFactory::class` to learn how to implement such a factory.
 
 Alternatively you can provide a simple `Closure` anywhere in your application:
 
@@ -112,10 +118,12 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        Honeypot::respondToFormTokenErrorsUsing(fn (bool $isGraphQLRequest) => $isGraphQLRequest
+        $errorResponseFactory = fn (bool $isGraphQLRequest) => $isGraphQLRequest
             ? ['errors' => [['message' => 'Whoops, something went wrong …']]]
-            : 'Whoops, something went wrong …'
-        );
+            : 'Whoops, something went wrong …';
+
+        Honeypot::respondToHoneypotErrorsUsing($errorResponseFactory);
+        Honeypot::respondToFormTokenErrorsUsing($errorResponseFactory);
     }
 }
 ```

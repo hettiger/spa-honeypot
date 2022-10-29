@@ -4,14 +4,14 @@ namespace Hettiger\Honeypot\Http\Middleware;
 
 use Closure;
 use Hettiger\Honeypot\Capabilities\RecognizesFormTokenRequests;
-use Hettiger\Honeypot\Capabilities\RespondsWithNewFormToken;
+use Hettiger\Honeypot\Capabilities\RespondsWithNewFormTokens;
 use Hettiger\Honeypot\Facades\Honeypot;
 use Illuminate\Http\Request;
 
 class HandleFormTokenRequests
 {
     use RecognizesFormTokenRequests;
-    use RespondsWithNewFormToken;
+    use RespondsWithNewFormTokens;
 
     public function handle(Request $request, Closure $next)
     {
@@ -25,6 +25,6 @@ class HandleFormTokenRequests
             headers: $this->newTokenHeader()
         );
 
-        return $this->response($next($request));
+        return $this->responseWithNewFormToken($next($request));
     }
 }

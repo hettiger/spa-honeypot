@@ -4,7 +4,7 @@ namespace Hettiger\Honeypot;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class FormTokenErrorResponseFactory
+class ErrorResponseFactory
 {
     public function __invoke(bool $isGraphQLRequest): mixed
     {
