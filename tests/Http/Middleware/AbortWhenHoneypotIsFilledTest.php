@@ -1,6 +1,7 @@
 <?php
 
 use function Hettiger\Honeypot\config;
+use Hettiger\Honeypot\Facades\Honeypot;
 use Hettiger\Honeypot\Http\Middleware\AbortWhenHoneypotIsFilled;
 use function Hettiger\Honeypot\resolveByType;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,12 +38,22 @@ it('aborts when honeypot is filled', function () {
         ->toAbortWith(Response::HTTP_INTERNAL_SERVER_ERROR);
 });
 
-it('works with nested fields', function () {
-    config([
-        'spa-honeypot' => [
-            'field' => 'nested.honey',
-        ],
+it('aborts with custom error response when present', function () {
+    $sut = resolveByType(AbortWhenHoneypotIsFilled::class);
+    $request = withRequest();
+    $request->merge([
+        config('field') => 'value',
     ]);
+    $expectedResponse = response('response fake');
+
+    Honeypot::respondToHoneypotErrorsUsing(fn () => $expectedResponse);
+
+    expect(fn () => $sut->handle($request, fn () => 'bailed out'))
+        ->toAbortWithResponse($expectedResponse);
+});
+
+it('works with nested fields', function () {
+    config()->set('spa-honeypot.field', 'nested.honey');
     $sut = resolveByType(AbortWhenHoneypotIsFilled::class);
     $request = withRequest();
     $request->merge([

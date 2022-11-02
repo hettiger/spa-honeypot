@@ -60,6 +60,7 @@ it('aborts with custom error response when present', function (string $token) {
     $request = withRequest();
     $request->headers->set(config('header'), $token);
     $expectedResponse = response('response fake');
+
     Honeypot::respondToFormTokenErrorsUsing(fn () => $expectedResponse);
 
     expect(fn () => $sut->handle($request, fn () => 'bailed out'))

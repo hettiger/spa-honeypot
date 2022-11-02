@@ -4,8 +4,8 @@ namespace Hettiger\Honeypot\Http\Middleware;
 
 use Closure;
 use function Hettiger\Honeypot\config;
+use Hettiger\Honeypot\Facades\Honeypot;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class AbortWhenHoneypotIsFilled
 {
@@ -13,7 +13,7 @@ class AbortWhenHoneypotIsFilled
     {
         abort_if(
             $request->filled(config('field')),
-            Response::HTTP_INTERNAL_SERVER_ERROR,
+            Honeypot::honeypotErrorResponse(),
         );
 
         return $next($request);
