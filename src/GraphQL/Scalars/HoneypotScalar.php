@@ -3,8 +3,11 @@
 namespace Hettiger\Honeypot\GraphQL\Scalars;
 
 use GraphQL\Type\Definition\ScalarType;
+use Hettiger\Honeypot\Facades\Honeypot;
 
 /**
+ * TODO: Needs tests …
+ *
  * Read more about scalars here https://webonyx.github.io/graphql-php/type-definitions/scalars
  */
 final class HoneypotScalar extends ScalarType
@@ -19,8 +22,6 @@ final class HoneypotScalar extends ScalarType
     {
         // Assuming the internal representation of the value is always correct
         return $value;
-
-        // TODO validate if it might be incorrect
     }
 
     /**
@@ -31,7 +32,10 @@ final class HoneypotScalar extends ScalarType
      */
     public function parseValue($value)
     {
-        // TODO implement validation
+        abort_unless(
+            empty($value),
+            Honeypot::honeypotErrorResponse(),
+        );
 
         return $value;
     }
@@ -50,7 +54,10 @@ final class HoneypotScalar extends ScalarType
      */
     public function parseLiteral($valueNode, ?array $variables = null)
     {
-        // TODO implement validation
+        abort_unless(
+            empty($valueNode->value),
+            Honeypot::honeypotErrorResponse(),
+        );
 
         return $valueNode->value;
     }

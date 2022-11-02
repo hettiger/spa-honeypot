@@ -80,7 +80,26 @@ Route::post('form', fn () => 'OK')->middleware('form');
 ],
 ```
 
-2. Add the `@requireFormToken` directive to any field that you want to protect against SPAM
+2. Register the honeypot scalar in your `graphql/schema.graphql` file
+
+```graphql
+scalar Honeypot @scalar(class: "Hettiger\\Honeypot\\GraphQL\\Scalars\\HoneypotScalar")
+
+# …
+```
+
+3. Add a honeypot field to any input that you want to protect against SPAM
+
+```graphql
+input SendContactRequestInput {
+    # …
+    honey: Honeypot
+}
+```
+
+> The `field` config is not being used in GraphQL context.
+
+4. Add the `@requireFormToken` directive to any field that you want to protect against SPAM
 
 ```graphql
 # e.g. graphql/contact.graphql
@@ -90,7 +109,7 @@ extend type Mutation {
 }
 ```
 
-3. Use one of the corresponding frontend libraries to make form token requests
+5. Use one of the corresponding frontend libraries to make form token requests
 
 ### Customizing Responses
 
