@@ -8,6 +8,7 @@ use Hettiger\Honeypot\Http\Middleware\HandleFormTokenRequests;
 use Hettiger\Honeypot\Http\Middleware\RequireFormToken;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Routing\Router;
+use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -25,7 +26,12 @@ class HoneypotServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasViews()
             ->hasMigration('create_spa-honeypot_table')
-            ->hasCommand(HoneypotCommand::class);
+            ->hasCommand(HoneypotCommand::class)
+            ->hasInstallCommand(function (InstallCommand $command) {
+                $command
+                    ->publishConfigFile()
+                    ->askToStarRepoOnGitHub('hettiger/spa-honeypot');
+            });
     }
 
     public function boot()

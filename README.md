@@ -13,6 +13,7 @@ You can install the package via composer:
 
 ```bash
 composer require hettiger/spa-honeypot
+php artisan spa-honeypot:install
 ```
 
 You can publish and run the migrations with:
