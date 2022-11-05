@@ -42,9 +42,6 @@ class HoneypotServiceProvider extends PackageServiceProvider
         $this->registerGraphQLNamespaces();
     }
 
-    /**
-     * TODO: Cover middleware groups / aliases and usage docs with tests
-     */
     public function registerMiddleware(): void
     {
         if (! config('registers_middleware')) {
