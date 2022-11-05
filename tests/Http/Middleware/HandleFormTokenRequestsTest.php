@@ -8,7 +8,6 @@ use function Hettiger\Honeypot\resolveByType;
 use Hettiger\Honeypot\Tests\Fakes\ResponsableFake;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Str;
-use function Pest\Laravel\travel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
@@ -79,7 +78,7 @@ it('adds a new token to the response when a valid token is present in the header
     $sut = resolveByType(HandleFormTokenRequests::class);
     $request = withRequest();
     $request->headers->set(config('header'), FormToken::make()->persisted()->id);
-    travel(config('min_age')->totalSeconds)->seconds();
+    simulateSlowHuman();
 
     $response = $sut->handle($request, fn () => 'bailed out');
 
@@ -94,7 +93,7 @@ it("can add new token header even if it has to deal with responsable's", functio
     $request = withRequest();
     $request->headers->set(config('header'), FormToken::make()->persisted()->id);
     $expectedResponse = response('response fake');
-    travel(config('min_age')->totalSeconds)->seconds();
+    simulateSlowHuman();
 
     $actualResponse = $sut->handle($request, fn () => new ResponsableFake($expectedResponse));
 

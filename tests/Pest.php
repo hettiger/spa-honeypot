@@ -1,14 +1,18 @@
 <?php
 
+use function Hettiger\Honeypot\config;
+use Hettiger\Honeypot\Tests\Features\FeatureTestHelpers;
 use Hettiger\Honeypot\Tests\TestCase;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use function Pest\Laravel\swap;
+use function Pest\Laravel\travel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 uses(TestCase::class)->in(__DIR__);
+uses(FeatureTestHelpers::class)->in('Features');
 
 function withGraphQLRequest(?Request $request = null): Request
 {
@@ -24,6 +28,11 @@ function withRequest(?Request $request = null): Request
     swap('request', $request);
 
     return $request;
+}
+
+function simulateSlowHuman()
+{
+    travel(config('min_age')->totalSeconds)->seconds();
 }
 
 expect()->extend('toAbortWith', function (int $statusCode, string $message = '', array $headers = []) {
