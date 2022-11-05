@@ -1,5 +1,7 @@
 <?php
 
+namespace Hettiger\Honeypot\Tests\Features\FormTokenProtection;
+
 use function Hettiger\Honeypot\config;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
