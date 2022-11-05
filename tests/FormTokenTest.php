@@ -6,11 +6,17 @@ use Hettiger\Honeypot\FormToken;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use function Pest\Laravel\travel;
+use function Pest\Laravel\travelBack;
 use function Pest\Laravel\travelTo;
 
 beforeEach(function () {
     Str::freezeUuids();
     travelTo(today());
+});
+
+afterEach(function () {
+    Str::createUuidsNormally();
+    travelBack();
 });
 
 it('can be instantiated using a factory function', function () {

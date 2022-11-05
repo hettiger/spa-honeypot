@@ -16,6 +16,10 @@ beforeEach(function () {
     Str::freezeUuids();
 });
 
+afterEach(function () {
+    Str::createUuidsNormally();
+});
+
 it('bails out when header is missing', function () {
     $sut = resolveByType(HandleFormTokenRequests::class);
     $request = withRequest();

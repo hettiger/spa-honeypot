@@ -8,6 +8,10 @@ beforeEach(function () {
     Str::freezeUuids();
 });
 
+afterEach(function () {
+    Str::createUuidsNormally();
+});
+
 test('honeypotErrorResponse returns HTTP status code 500', function () {
     expect(Honeypot::honeypotErrorResponse())
         ->toEqual(500);
