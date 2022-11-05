@@ -43,11 +43,14 @@ class HoneypotServiceProvider extends PackageServiceProvider
     }
 
     /**
-     * TODO: Make middleware registration optional / configurable
      * TODO: Cover middleware groups / aliases and usage docs with tests
      */
-    protected function registerMiddleware(): void
+    public function registerMiddleware(): void
     {
+        if (! config('registers_middleware')) {
+            return;
+        }
+
         $router = resolveByType(Router::class);
 
         $router->aliasMiddleware('form.honeypot', AbortWhenHoneypotIsFilled::class);
@@ -57,7 +60,7 @@ class HoneypotServiceProvider extends PackageServiceProvider
         $router->middlewareGroup('form', ['form.honeypot', 'form.token']);
     }
 
-    protected function registerGraphQLNamespaces()
+    public function registerGraphQLNamespaces()
     {
         $events = resolveByType(Dispatcher::class);
 

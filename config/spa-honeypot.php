@@ -10,4 +10,5 @@ return [
     'max_age' => CarbonInterval::minutes(15),
     'honeypot_error_response_factory' => \Hettiger\Honeypot\ErrorResponseFactory::class,
     'form_token_error_response_factory' => \Hettiger\Honeypot\ErrorResponseFactory::class,
+    'registers_middleware' => true,
 ];
