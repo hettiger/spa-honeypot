@@ -2,12 +2,11 @@
 
 namespace Hettiger\Honeypot\GraphQL\Scalars;
 
+use GraphQL\Error\Error;
 use GraphQL\Type\Definition\ScalarType;
 use Hettiger\Honeypot\Facades\Honeypot;
 
 /**
- * TODO: Needs tests …
- *
  * Read more about scalars here https://webonyx.github.io/graphql-php/type-definitions/scalars
  */
 final class HoneypotScalar extends ScalarType
@@ -20,8 +19,7 @@ final class HoneypotScalar extends ScalarType
      */
     public function serialize($value)
     {
-        // Assuming the internal representation of the value is always correct
-        return $value;
+        throw new Error('Serializing honeypot is not supported.');
     }
 
     /**
@@ -54,6 +52,10 @@ final class HoneypotScalar extends ScalarType
      */
     public function parseLiteral($valueNode, ?array $variables = null)
     {
+        if (! property_exists($valueNode, 'value')) {
+            throw new Error('Type of $valueNode does not provide a value property.');
+        }
+
         abort_unless(
             empty($valueNode->value),
             Honeypot::honeypotErrorResponse(),
