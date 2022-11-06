@@ -19,6 +19,21 @@ afterEach(function () {
     Str::createUuidsNormally();
 });
 
+it('bails out when package is not enabled', function () {
+    config()->set('spa-honeypot.enabled', false);
+    $sut = resolveByType(HandleFormTokenRequests::class);
+    $request = withRequest();
+    $request->headers->set(config('header'), '');
+    $expectedResponse = response('bailed out');
+
+    $actualResponse = $sut->handle($request, fn () => $expectedResponse);
+
+    expect($actualResponse)
+        ->toBe($expectedResponse)
+        ->and($actualResponse->headers->has(config('header')))
+        ->toBeFalse();
+});
+
 it('bails out when header is missing', function () {
     $sut = resolveByType(HandleFormTokenRequests::class);
     $request = withRequest();

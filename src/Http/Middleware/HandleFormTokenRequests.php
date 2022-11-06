@@ -5,6 +5,7 @@ namespace Hettiger\Honeypot\Http\Middleware;
 use Closure;
 use Hettiger\Honeypot\Capabilities\RecognizesFormTokenRequests;
 use Hettiger\Honeypot\Capabilities\RespondsWithNewFormTokens;
+use function Hettiger\Honeypot\config;
 use Hettiger\Honeypot\Facades\Honeypot;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class HandleFormTokenRequests
 
     public function handle(Request $request, Closure $next)
     {
-        if (! $this->isFormTokenRequest()) {
+        if (! config('enabled') || ! $this->isFormTokenRequest()) {
             return $next($request);
         }
 
