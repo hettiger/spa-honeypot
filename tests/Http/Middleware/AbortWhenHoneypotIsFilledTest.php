@@ -6,6 +6,19 @@ use Hettiger\Honeypot\Http\Middleware\AbortWhenHoneypotIsFilled;
 use function Hettiger\Honeypot\resolveByType;
 use Symfony\Component\HttpFoundation\Response;
 
+it('bails out when package is not enabled', function () {
+    config()->set('spa-honeypot.enabled', false);
+    $sut = resolveByType(AbortWhenHoneypotIsFilled::class);
+    $request = withRequest();
+    $request->merge([
+        config('field') => 'value',
+    ]);
+
+    $response = $sut->handle($request, fn () => 'bailed out');
+
+    expect($response)->toEqual('bailed out');
+});
+
 it('bails out when honeypot is missing', function () {
     $sut = resolveByType(AbortWhenHoneypotIsFilled::class);
     $request = withRequest();

@@ -11,6 +11,10 @@ class AbortWhenHoneypotIsFilled
 {
     public function handle(Request $request, Closure $next)
     {
+        if (! config('enabled')) {
+            return $next($request);
+        }
+
         abort_if(
             $request->filled(config('field')),
             Honeypot::honeypotErrorResponse(),
