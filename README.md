@@ -9,52 +9,12 @@ Helps to protect SPA's (Single Page Applications) against SPAM without using coo
 
 ## Installation
 
-You can install the package via composer:
-
 ```bash
 composer require hettiger/spa-honeypot
 php artisan spa-honeypot:install
 ```
 
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="spa-honeypot-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="spa-honeypot-config"
-```
-
-This is the contents of the published config file:
-
-```php
-use Carbon\CarbonInterval;
-
-return [
-    'field' => 'honey',
-    'header' => 'spa-form-token',
-    'cache_prefix' => 'spa-form-token-',
-    'min_age' => CarbonInterval::seconds(3),
-    'max_age' => CarbonInterval::minutes(15),
-    'honeypot_error_response_factory' => \Hettiger\Honeypot\ErrorResponseFactory::class,
-    'form_token_error_response_factory' => \Hettiger\Honeypot\ErrorResponseFactory::class,
-    'registers_middleware' => true,
-];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="spa-honeypot-views"
-```
-
 ## Usage
-
-### REST API
 
 1. Add the `form.honeypot`, `form.token`  or `form` middleware to a forms target route
 
@@ -65,7 +25,7 @@ Route::post('form', fn () => 'OK')->middleware('form');
 > The `form` middleware group simply combines `form.honeypot` and `form.token` so you don't have to.
 > Using just `form.token` protection without the `form.honeypot` middleware or vise versa is supported. 
 
-2. Use one of the corresponding frontend libraries to make form token requests 
+2. Use one of the corresponding [frontend libraries](#frontend-libraries) to make form token requests 
 
 ### Lighthouse GraphQL API
 
@@ -110,7 +70,7 @@ extend type Mutation {
 }
 ```
 
-5. Use one of the corresponding frontend libraries to make form token requests
+5. Use one of the corresponding [frontend libraries](#frontend-libraries) to make form token requests
 
 ### Customizing Responses
 
@@ -120,15 +80,10 @@ You may provide custom error response factories using the config:
 return [
     // …
     
-    // provide a invokable class to be used as the honeypot error response factory here
     'honeypot_error_response_factory' => \Hettiger\Honeypot\ErrorResponseFactory::class,
-    
-    // provide a invokable class to be used as the form token error response factory here
     'form_token_error_response_factory' => \Hettiger\Honeypot\ErrorResponseFactory::class,
 ];
 ```
-
-> See `\Hettiger\Honeypot\ErrorResponseFactory::class` to learn how to implement such a factory.
 
 Alternatively you can provide a simple `Closure` anywhere in your application:
 
@@ -160,22 +115,17 @@ class AppServiceProvider extends ServiceProvider
 composer test
 ```
 
+## Frontend Libraries
+
+Nothing released yet, this is still a work in progress …
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Security Vulnerabilities
-
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
-
 ## Credits
 
 - [Martin Hettiger](https://github.com/hettiger)
-- [All Contributors](../../contributors)
 
 ## License
 
