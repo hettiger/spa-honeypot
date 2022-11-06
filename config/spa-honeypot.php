@@ -6,7 +6,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Honeypot Field
+    | Feature Flag
+    |--------------------------------------------------------------------------
+    |
+    | This feature flag determines whether the anti SPAM protection should
+    | be active.
+    |
+    */
+
+    'enabled' => env('HONEYPOT_ENABLED', true),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Honeypot Field Name
     |--------------------------------------------------------------------------
     |
     | When the field is filled the request will be blocked.
@@ -30,7 +42,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Cache Prefix
+    | Cache Key Prefix
     |--------------------------------------------------------------------------
     |
     | Time based anti SPAM protection works by storing a form token in the
@@ -43,7 +55,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Minimum Age
+    | Minimum Form Token Age
     |--------------------------------------------------------------------------
     |
     | The minimum amount of time a human is expected to need for submitting
@@ -55,7 +67,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Maximum Age
+    | Maximum Form Token Age
     |--------------------------------------------------------------------------
     |
     | The time to live of form token cache entries.
@@ -66,7 +78,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Response Factories
+    | Error Response Factories
     |--------------------------------------------------------------------------
     |
     | You may customize the way this package responds to errors by providing
