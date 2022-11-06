@@ -6,6 +6,16 @@ use Hettiger\Honeypot\Http\Middleware\RequireFormToken;
 use function Hettiger\Honeypot\resolveByType;
 use Symfony\Component\HttpFoundation\Response;
 
+it('bails out when package is not enabled', function () {
+    config()->set('spa-honeypot.enabled', false);
+    $sut = resolveByType(RequireFormToken::class);
+    $request = withRequest();
+
+    $response = $sut->handle($request, fn () => 'bailed out');
+
+    expect($response)->toEqual('bailed out');
+});
+
 it('bails out when header is present', function () {
     $sut = resolveByType(RequireFormToken::class);
     $request = withRequest();
