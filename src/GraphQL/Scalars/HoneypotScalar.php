@@ -4,6 +4,7 @@ namespace Hettiger\Honeypot\GraphQL\Scalars;
 
 use GraphQL\Error\Error;
 use GraphQL\Type\Definition\ScalarType;
+use function Hettiger\Honeypot\config;
 use Hettiger\Honeypot\Facades\Honeypot;
 
 /**
@@ -30,6 +31,10 @@ final class HoneypotScalar extends ScalarType
      */
     public function parseValue($value)
     {
+        if (! config('enabled')) {
+            return $value;
+        }
+
         abort_unless(
             empty($value),
             Honeypot::honeypotErrorResponse(),
@@ -54,6 +59,10 @@ final class HoneypotScalar extends ScalarType
     {
         if (! property_exists($valueNode, 'value')) {
             throw new Error('Type of $valueNode does not provide a value property.');
+        }
+
+        if (! config('enabled')) {
+            return $valueNode->value;
         }
 
         abort_unless(

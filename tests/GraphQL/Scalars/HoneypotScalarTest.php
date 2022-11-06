@@ -16,6 +16,17 @@ it('does not support serialization', function () {
     );
 });
 
+it('bails out when package is not enabled', function () {
+    config()->set('spa-honeypot.enabled', false);
+    $sut = new HoneypotScalar();
+    $value = 'value-fake';
+
+    expect($sut->parseValue($value))
+        ->toBe($value)
+        ->and($sut->parseLiteral(new NodeFake($value)))
+        ->toBe($value);
+});
+
 it('bails out on empty $value', function ($value) {
     $sut = new HoneypotScalar();
 
