@@ -16,6 +16,22 @@ beforeEach(function () {
     $this->setUpTestSchema();
 });
 
+it('bails out when package is not enabled', function (string $schema, string $query) {
+    config()->set('spa-honeypot.enabled', false);
+    $this->schema = $schema;
+    $this->mockResolver()->willReturn('OK');
+
+    /** @noinspection GraphQLUnresolvedReference */
+    $this->graphQL($query)
+        ->assertExactJson([
+            'data' => [
+                'fieldFake' => 'OK',
+            ],
+        ]);
+})
+->with('schema')
+->with('query');
+
 it('bails out when header is present', function (string $schema, string $query) {
     $this->schema = $schema;
     $this->mockResolver()->willReturn('OK');

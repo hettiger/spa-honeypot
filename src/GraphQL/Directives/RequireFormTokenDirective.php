@@ -4,6 +4,7 @@ namespace Hettiger\Honeypot\GraphQL\Directives;
 
 use Closure;
 use Hettiger\Honeypot\Capabilities\RecognizesFormTokenRequests;
+use function Hettiger\Honeypot\config;
 use Hettiger\Honeypot\Facades\Honeypot;
 use Nuwave\Lighthouse\Schema\Directives\BaseDirective;
 use Nuwave\Lighthouse\Schema\Values\FieldValue;
@@ -29,6 +30,10 @@ GRAPHQL;
      */
     public function handleField(FieldValue $fieldValue, Closure $next)
     {
+        if (! config('enabled')) {
+            return $next($fieldValue);
+        }
+
         abort_unless(
             $this->isFormTokenRequest(),
             Honeypot::formTokenErrorResponse(false),
