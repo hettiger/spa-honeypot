@@ -2,7 +2,6 @@
 
 namespace Hettiger\Honeypot;
 
-use Hettiger\Honeypot\Commands\HoneypotCommand;
 use Hettiger\Honeypot\Http\Middleware\AbortWhenHoneypotIsFilled;
 use Hettiger\Honeypot\Http\Middleware\HandleFormTokenRequests;
 use Hettiger\Honeypot\Http\Middleware\RequireFormToken;
@@ -26,7 +25,6 @@ class HoneypotServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasViews()
             ->hasMigration('create_spa-honeypot_table')
-            ->hasCommand(HoneypotCommand::class)
             ->hasInstallCommand(function (InstallCommand $command) {
                 $command
                     ->publishConfigFile()
