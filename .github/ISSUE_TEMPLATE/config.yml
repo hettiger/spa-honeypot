@@ -6,9 +6,6 @@ contact_links:
   - name: Request a feature
     url: https://github.com/hettiger/spa-honeypot/discussions/new?category=ideas
     about: Share ideas for new features
-  - name: Report a security issue
-    url: https://github.com/hettiger/spa-honeypot/security/policy
-    about: Learn how to notify us for sensitive bugs
   - name: Report a bug
     url: https://github.com/hettiger/spa-honeypot/issues/new
     about: Report a reproducible bug
