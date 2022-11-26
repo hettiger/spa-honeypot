@@ -14,6 +14,20 @@ composer require hettiger/spa-honeypot
 php artisan spa-honeypot:install
 ```
 
+### Mandatory Configuration
+
+Time based anti SPAM protection relies on a custom HTTP header.
+Per default CORS responses don't expose custom headers.
+You must expose the header set in the `spa-honeypot.header` config:
+
+```php
+// config/cors.php
+
+'exposed_headers' => ['spa-form-token'],
+```
+
+> Make sure to keep these two config values in sync at all times.
+
 ## Usage
 
 1. Add the `form.honeypot`, `form.token`  or `form` middleware to a forms target route
