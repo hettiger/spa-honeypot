@@ -47,6 +47,15 @@ it('bails out when header is present', function (string $schema, string $query) 
 ->with('schema')
 ->with('query');
 
+it('bails out when query is introspection query', function (string $schema, string $query) {
+    $this->schema = $schema;
+
+    /** @noinspection GraphQLUnresolvedReference */
+    $this->graphQL($query)->assertGraphQLErrorFree();
+})
+->with('schema')
+->with('introspection query');
+
 it('aborts when header is missing', function (string $schema, string $query) {
     $this->schema = $schema;
     $this->mockResolverExpects($this->never());
