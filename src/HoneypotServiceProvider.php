@@ -37,8 +37,15 @@ class HoneypotServiceProvider extends PackageServiceProvider
     {
         parent::boot();
 
+        $this->appendCorsConfig();
         $this->registerMiddleware();
         $this->registerGraphQLNamespaces();
+    }
+
+    public function appendCorsConfig()
+    {
+        config()->push('cors.exposed_headers', config('header'));
+        config()->push('cors.paths', config('token_route_path'));
     }
 
     public function registerMiddleware(): void

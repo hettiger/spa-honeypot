@@ -47,3 +47,10 @@ it('registers a named form token route', function () {
 
     expect($response->headers->has(config('header')))->toBeTrue();
 });
+
+it('does append CORS config', function () {
+    expect(config('cors.paths'))
+        ->toContain(config('token_route_path'))
+        ->and(config('cors.exposed_headers'))
+        ->toContain(config('header'));
+});
