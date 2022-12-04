@@ -1,7 +1,6 @@
 <?php
 
 /** @noinspection GraphQLUnresolvedReference */
-
 dataset('introspection query', fn () => [
     'query' => /** @lang GraphQL */ <<<'GRAPHQL'
 {
