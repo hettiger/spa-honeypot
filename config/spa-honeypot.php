@@ -42,6 +42,30 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Form Token Route Path
+    |--------------------------------------------------------------------------
+    |
+    | The form token route is used by frontend libraries to request initial
+    | form tokens. Customize the path to make things less obvious …
+    |
+    */
+
+    'token_route_path' => 'spa-form-token',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Form Token Route Middleware
+    |--------------------------------------------------------------------------
+    |
+    | The form token route is used by frontend libraries to request initial
+    | form tokens. Customize the middleware e.g. to add a route limiter.
+    |
+    */
+
+    'token_route_middleware' => ['form.token'],
+
+    /*
+    |--------------------------------------------------------------------------
     | Cache Key Prefix
     |--------------------------------------------------------------------------
     |

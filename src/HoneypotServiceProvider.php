@@ -23,6 +23,7 @@ class HoneypotServiceProvider extends PackageServiceProvider
         $package
             ->name('spa-honeypot')
             ->hasConfigFile()
+            ->hasRoute('spa-honeypot')
             ->hasViews()
             ->hasMigration('create_spa-honeypot_table')
             ->hasInstallCommand(function (InstallCommand $command) {
