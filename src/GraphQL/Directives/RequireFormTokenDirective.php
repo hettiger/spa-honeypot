@@ -32,7 +32,7 @@ GRAPHQL;
      */
     public function handleField(FieldValue $fieldValue, Closure $next)
     {
-        if (! config('enabled')) {
+        if (! config('enabled') || ! $this->isGraphQLRequest()) {
             return $next($fieldValue);
         }
 
