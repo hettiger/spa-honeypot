@@ -117,7 +117,7 @@ composer test
 
 ## Frontend Libraries
 
-Nothing released yet, this is still a work in progress …
+- [Angular](https://www.npmjs.com/package/@hettiger/ngx-spa-honeypot)
 
 ## Changelog
 
