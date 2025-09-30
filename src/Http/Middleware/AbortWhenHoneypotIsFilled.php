@@ -3,9 +3,10 @@
 namespace Hettiger\Honeypot\Http\Middleware;
 
 use Closure;
-use function Hettiger\Honeypot\config;
 use Hettiger\Honeypot\Facades\Honeypot;
 use Illuminate\Http\Request;
+
+use function Hettiger\Honeypot\config;
 
 class AbortWhenHoneypotIsFilled
 {

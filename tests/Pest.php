@@ -1,15 +1,16 @@
 <?php
 
-use function Hettiger\Honeypot\config;
 use Hettiger\Honeypot\Tests\Features\FeatureTestHelpers;
 use Hettiger\Honeypot\Tests\TestCase;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use function Pest\Laravel\swap;
-use function Pest\Laravel\travel;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+
+use function Hettiger\Honeypot\config;
+use function Pest\Laravel\swap;
+use function Pest\Laravel\travel;
 
 uses(TestCase::class)->in(__DIR__);
 uses(FeatureTestHelpers::class)->in('Features');

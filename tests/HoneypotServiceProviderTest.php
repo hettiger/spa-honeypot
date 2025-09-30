@@ -1,10 +1,11 @@
 <?php
 
-use function Hettiger\Honeypot\config;
 use Hettiger\Honeypot\HoneypotServiceProvider;
-use function Hettiger\Honeypot\resolveByType;
 use Illuminate\Routing\Router;
 use Mockery\MockInterface;
+
+use function Hettiger\Honeypot\config;
+use function Hettiger\Honeypot\resolveByType;
 use function Pest\Laravel\mock;
 use function Pest\Laravel\swap;
 

@@ -1,15 +1,16 @@
 <?php
 
-use function Hettiger\Honeypot\config;
 use Hettiger\Honeypot\Facades\Honeypot;
 use Hettiger\Honeypot\FormToken;
 use Hettiger\Honeypot\Http\Middleware\HandleFormTokenRequests;
-use function Hettiger\Honeypot\resolveByType;
 use Hettiger\Honeypot\Tests\Fakes\ResponsableFake;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+
+use function Hettiger\Honeypot\config;
+use function Hettiger\Honeypot\resolveByType;
 
 beforeEach(function () {
     Str::freezeUuids();
@@ -58,7 +59,7 @@ it('aborts when an invalid or empty token is present in the header', function (s
             headers: [config('header') => Str::uuid()->toString()]
         );
 })
-->with('tokens');
+    ->with('tokens');
 
 it('aborts with GraphQL spec conforming errors on GraphQL requests', function (string $token) {
     $sut = resolveByType(HandleFormTokenRequests::class);
@@ -71,7 +72,7 @@ it('aborts with GraphQL spec conforming errors on GraphQL requests', function (s
             ->and($exception->getResponse()->headers->contains(config('header'), Str::uuid()->toString()))
         );
 })
-->with('tokens');
+    ->with('tokens');
 
 it('aborts with custom error response when present', function (string $token) {
     $sut = resolveByType(HandleFormTokenRequests::class);
@@ -87,7 +88,7 @@ it('aborts with custom error response when present', function (string $token) {
             fn (ResponseHeaderBag $bag) => $bag->contains(config('header'), Str::uuid()->toString())
         );
 })
-->with('tokens');
+    ->with('tokens');
 
 it('adds a new token to the response when a valid token is present in the header', function () {
     $sut = resolveByType(HandleFormTokenRequests::class);

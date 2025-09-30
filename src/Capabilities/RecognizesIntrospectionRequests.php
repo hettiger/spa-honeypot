@@ -13,7 +13,7 @@ trait RecognizesIntrospectionRequests
 
     protected function isIntrospectionRequest(): bool
     {
-        $isIntrospectionQuery = function (Token|null $token) use (&$isIntrospectionQuery): bool {
+        $isIntrospectionQuery = function (?Token $token) use (&$isIntrospectionQuery): bool {
             if (! $token) {
                 return false;
             }

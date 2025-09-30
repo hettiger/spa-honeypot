@@ -1,10 +1,11 @@
 <?php
 
 use Carbon\CarbonInterval;
-use function Hettiger\Honeypot\config;
 use Hettiger\Honeypot\FormToken;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
+
+use function Hettiger\Honeypot\config;
 use function Pest\Laravel\travel;
 use function Pest\Laravel\travelBack;
 use function Pest\Laravel\travelTo;
