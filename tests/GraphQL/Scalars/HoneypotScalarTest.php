@@ -7,7 +7,7 @@ use Hettiger\Honeypot\GraphQL\Scalars\HoneypotScalar;
 use Hettiger\Honeypot\Tests\Fakes\NodeFake;
 
 it('does not support serialization', function () {
-    $sut = new HoneypotScalar();
+    $sut = new HoneypotScalar;
     $value = 'value-fake';
 
     expect(fn () => $sut->serialize($value))->toThrow(
@@ -18,7 +18,7 @@ it('does not support serialization', function () {
 
 it('bails out when package is not enabled', function () {
     config()->set('spa-honeypot.enabled', false);
-    $sut = new HoneypotScalar();
+    $sut = new HoneypotScalar;
     $value = 'value-fake';
 
     expect($sut->parseValue($value))
@@ -28,20 +28,20 @@ it('bails out when package is not enabled', function () {
 });
 
 it('bails out on empty $value', function ($value) {
-    $sut = new HoneypotScalar();
+    $sut = new HoneypotScalar;
 
     expect($sut->parseValue($value))
         ->toBe($value)
         ->and($sut->parseLiteral(new NodeFake($value)))
         ->toBe($value);
 })
-->with([
-    null,
-    '',
-]);
+    ->with([
+        null,
+        '',
+    ]);
 
 it('aborts on non-empty $value', function () {
-    $sut = new HoneypotScalar();
+    $sut = new HoneypotScalar;
     $value = 'value-fake';
 
     expect(fn () => $sut->parseValue($value))
@@ -52,7 +52,7 @@ it('aborts on non-empty $value', function () {
 });
 
 it('aborts using custom response factory when available', function () {
-    $sut = new HoneypotScalar();
+    $sut = new HoneypotScalar;
     $value = 'value-fake';
     $expectedResponse = response(['data' => 'response fake']);
     Honeypot::respondToHoneypotErrorsUsing(fn () => $expectedResponse);
@@ -65,7 +65,7 @@ it('aborts using custom response factory when available', function () {
 });
 
 it('does not support $valueNode without value', function () {
-    $sut = new HoneypotScalar();
+    $sut = new HoneypotScalar;
 
     expect(fn () => $sut->parseLiteral(new NullValueNode([])))
         ->toThrow(fn (Error $e) => expect($e->getMessage())

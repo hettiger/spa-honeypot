@@ -7,9 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ResponsableFake implements Responsable
 {
-    public function __construct(public Response $expectedResponse)
-    {
-    }
+    public function __construct(public Response $expectedResponse) {}
 
     public function toResponse($request)
     {

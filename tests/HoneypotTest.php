@@ -1,8 +1,9 @@
 <?php
 
-use function Hettiger\Honeypot\config;
 use Hettiger\Honeypot\Facades\Honeypot;
 use Illuminate\Support\Str;
+
+use function Hettiger\Honeypot\config;
 
 beforeEach(function () {
     Str::freezeUuids();
@@ -67,10 +68,10 @@ test(
         expect($actualResponse)->toBe($isGraphQLRequest ? $expectedGraphQLResponse : $expectedResponse);
     }
 )
-->with([
-    'normal request' => false,
-    'GraphQL request' => true,
-]);
+    ->with([
+        'normal request' => false,
+        'GraphQL request' => true,
+    ]);
 
 test(
     'formTokenErrorResponse returns custom response when available',
@@ -92,9 +93,9 @@ test(
             ->toBe($withNewToken);
     }
 )
-->with([
-    'new token' => [true, false],
-    'without token' => [false, false],
-    'new token, GraphQL' => [true, true],
-    'without token, GraphQL' => [false, true],
-]);
+    ->with([
+        'new token' => [true, false],
+        'without token' => [false, false],
+        'new token, GraphQL' => [true, true],
+        'without token, GraphQL' => [false, true],
+    ]);

@@ -1,10 +1,11 @@
 <?php
 
-use function Hettiger\Honeypot\config;
 use Hettiger\Honeypot\Facades\Honeypot;
 use Hettiger\Honeypot\Http\Middleware\AbortWhenHoneypotIsFilled;
-use function Hettiger\Honeypot\resolveByType;
 use Symfony\Component\HttpFoundation\Response;
+
+use function Hettiger\Honeypot\config;
+use function Hettiger\Honeypot\resolveByType;
 
 it('bails out when package is not enabled', function () {
     config()->set('spa-honeypot.enabled', false);
