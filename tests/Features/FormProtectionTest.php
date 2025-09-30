@@ -2,8 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
-use function Pest\Laravel\travelBack;
 use Ramsey\Uuid\Uuid;
+
+use function Pest\Laravel\travelBack;
 
 beforeEach(function () {
     Str::createUuidsUsingSequence(

@@ -2,10 +2,11 @@
 
 namespace Hettiger\Honeypot\Tests\Features;
 
-use function Hettiger\Honeypot\config;
 use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
 use Symfony\Component\HttpFoundation\Response;
+
+use function Hettiger\Honeypot\config;
 
 trait FeatureTestHelpers
 {

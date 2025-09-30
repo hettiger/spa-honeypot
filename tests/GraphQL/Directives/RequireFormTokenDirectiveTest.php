@@ -1,10 +1,11 @@
 <?php
 
-use function Hettiger\Honeypot\config;
 use Hettiger\Honeypot\Facades\Honeypot;
 use Nuwave\Lighthouse\Testing\MakesGraphQLRequests;
 use Nuwave\Lighthouse\Testing\MocksResolvers;
 use Nuwave\Lighthouse\Testing\UsesTestSchema;
+
+use function Hettiger\Honeypot\config;
 
 uses(
     MakesGraphQLRequests::class,
@@ -29,8 +30,8 @@ it('bails out when package is not enabled', function (string $schema, string $qu
             ],
         ]);
 })
-->with('schema')
-->with('query');
+    ->with('schema')
+    ->with('query');
 
 it('bails out when header is present', function (string $schema, string $query) {
     $this->schema = $schema;
@@ -44,8 +45,8 @@ it('bails out when header is present', function (string $schema, string $query) 
             ],
         ]);
 })
-->with('schema')
-->with('query');
+    ->with('schema')
+    ->with('query');
 
 it('bails out when query is introspection query', function (string $schema, string $query) {
     $this->schema = $schema;
@@ -53,8 +54,8 @@ it('bails out when query is introspection query', function (string $schema, stri
     /** @noinspection GraphQLUnresolvedReference */
     $this->graphQL($query)->assertGraphQLErrorFree();
 })
-->with('schema')
-->with('introspection query');
+    ->with('schema')
+    ->with('introspection query');
 
 it('aborts when header is missing', function (string $schema, string $query) {
     $this->schema = $schema;
@@ -64,8 +65,8 @@ it('aborts when header is missing', function (string $schema, string $query) {
     $this->graphQL($query)
         ->assertGraphQLErrorMessage('Internal Server Error');
 })
-->with('schema')
-->with('query');
+    ->with('schema')
+    ->with('query');
 
 it('aborts using custom response factory when available', function (string $schema, string $query) {
     $this->schema = $schema;
@@ -76,5 +77,5 @@ it('aborts using custom response factory when available', function (string $sche
     $this->graphQL($query)
         ->assertExactJson(['data' => 'response fake']);
 })
-->with('schema')
-->with('query');
+    ->with('schema')
+    ->with('query');

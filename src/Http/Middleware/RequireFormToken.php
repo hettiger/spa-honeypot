@@ -4,9 +4,10 @@ namespace Hettiger\Honeypot\Http\Middleware;
 
 use Closure;
 use Hettiger\Honeypot\Capabilities\RecognizesFormTokenRequests;
-use function Hettiger\Honeypot\config;
 use Hettiger\Honeypot\Facades\Honeypot;
 use Illuminate\Http\Request;
+
+use function Hettiger\Honeypot\config;
 
 class RequireFormToken
 {

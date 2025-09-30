@@ -2,8 +2,9 @@
 
 namespace Hettiger\Honeypot\Capabilities;
 
-use function Hettiger\Honeypot\config;
 use Hettiger\Honeypot\FormToken;
+
+use function Hettiger\Honeypot\config;
 
 trait InteractsWithFormTokens
 {

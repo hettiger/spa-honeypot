@@ -4,8 +4,9 @@ namespace Hettiger\Honeypot\GraphQL\Scalars;
 
 use GraphQL\Error\Error;
 use GraphQL\Type\Definition\ScalarType;
-use function Hettiger\Honeypot\config;
 use Hettiger\Honeypot\Facades\Honeypot;
+
+use function Hettiger\Honeypot\config;
 
 /**
  * Read more about scalars here https://webonyx.github.io/graphql-php/type-definitions/scalars
