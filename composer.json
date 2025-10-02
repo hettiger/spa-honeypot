@@ -16,22 +16,22 @@
         }
     ],
     "require": {
-        "php": "^8.1|^8.2|^8.3",
+        "php": "^8.2|^8.3",
         "spatie/laravel-package-tools": "^1.13.0",
-        "illuminate/contracts": "^10.0"
+        "illuminate/contracts": "^10.0|^11.0"
     },
     "suggest": {
         "nuwave/lighthouse": "This package supports Lighthouse PHP (optional)"
     },
     "conflict": {
-        "nuwave/lighthouse": "<5.61"
+        "nuwave/lighthouse": "<6.0"
     },
     "require-dev": {
         "laravel/pint": "^1.0",
-        "nunomaduro/collision": "^7.0",
+        "nunomaduro/collision": "^7.0|^8.1",
         "larastan/larastan": "^2.0.1",
-        "nuwave/lighthouse": "^5.61",
-        "orchestra/testbench": "^8.0",
+        "nuwave/lighthouse": "^6.0",
+        "orchestra/testbench": "^8.0|^9.0",
         "pestphp/pest": "^2.0",
         "pestphp/pest-plugin-laravel": "^2.0",
         "pestphp/pest-plugin-mock": "^2.0",

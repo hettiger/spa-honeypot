@@ -2,10 +2,10 @@
 
 namespace Hettiger\Honeypot\GraphQL\Directives;
 
-use Closure;
 use Hettiger\Honeypot\Capabilities\RecognizesFormTokenRequests;
 use Hettiger\Honeypot\Capabilities\RecognizesIntrospectionRequests;
 use Hettiger\Honeypot\Facades\Honeypot;
+use Hettiger\Honeypot\GraphQL\Exceptions\ClientSafeHttpResponseException;
 use Nuwave\Lighthouse\Schema\Directives\BaseDirective;
 use Nuwave\Lighthouse\Schema\Values\FieldValue;
 use Nuwave\Lighthouse\Support\Contracts\FieldMiddleware;
@@ -26,20 +26,17 @@ GRAPHQL;
 
     /**
      * Wrap around the final field resolver.
-     *
-     * @return \Nuwave\Lighthouse\Schema\Values\FieldValue
      */
-    public function handleField(FieldValue $fieldValue, Closure $next)
+    public function handleField(FieldValue $fieldValue): void
     {
         if (! config('enabled') || ! $this->isGraphQLRequest()) {
-            return $next($fieldValue);
+            return;
         }
 
-        abort_unless(
-            $this->isFormTokenRequest() || $this->isIntrospectionRequest(),
-            Honeypot::formTokenErrorResponse(false),
-        );
+        if ($this->isFormTokenRequest() || $this->isIntrospectionRequest()) {
+            return;
+        }
 
-        return $next($fieldValue);
+        throw new ClientSafeHttpResponseException(Honeypot::formTokenErrorResponse(false));
     }
 }

@@ -6,6 +6,7 @@ use GraphQL\Error\SyntaxError;
 use GraphQL\Language\AST\NodeKind;
 use GraphQL\Language\Parser;
 use GraphQL\Language\Token;
+use JsonException;
 
 trait RecognizesIntrospectionRequests
 {
@@ -27,7 +28,7 @@ trait RecognizesIntrospectionRequests
 
         try {
             $ast = Parser::parse(request('query'));
-        } catch (SyntaxError) {
+        } catch (SyntaxError|JsonException) {
             $ast = null;
         }
 

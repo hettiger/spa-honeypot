@@ -2,6 +2,7 @@
 
 namespace Hettiger\Honeypot;
 
+use Hettiger\Honeypot\GraphQL\Exceptions\ErrorHandler;
 use Hettiger\Honeypot\Http\Middleware\AbortWhenHoneypotIsFilled;
 use Hettiger\Honeypot\Http\Middleware\HandleFormTokenRequests;
 use Hettiger\Honeypot\Http\Middleware\RequireFormToken;
@@ -33,16 +34,17 @@ class HoneypotServiceProvider extends PackageServiceProvider
             });
     }
 
-    public function boot()
+    public function boot(): void
     {
         parent::boot();
 
         $this->appendCorsConfig();
         $this->registerMiddleware();
         $this->registerGraphQLNamespaces();
+        $this->appendLighthouseConfig();
     }
 
-    public function appendCorsConfig()
+    public function appendCorsConfig(): void
     {
         config()->push('cors.exposed_headers', config('header'));
         config()->push('cors.paths', config('token_route_path'));
@@ -63,7 +65,7 @@ class HoneypotServiceProvider extends PackageServiceProvider
         $router->middlewareGroup('form', ['form.honeypot', 'form.token']);
     }
 
-    public function registerGraphQLNamespaces()
+    public function registerGraphQLNamespaces(): void
     {
         $events = resolveByType(Dispatcher::class);
 
@@ -73,5 +75,12 @@ class HoneypotServiceProvider extends PackageServiceProvider
                 'Hettiger\\Honeypot\\GraphQL\Directives',
             ]
         );
+    }
+
+    public function appendLighthouseConfig(): void
+    {
+        if (config()->has('lighthouse.error_handlers')) {
+            config()->push('lighthouse.error_handlers', ErrorHandler::class);
+        }
     }
 }

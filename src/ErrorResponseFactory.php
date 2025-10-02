@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ErrorResponseFactory
 {
-    public function __invoke(bool $isGraphQLRequest): mixed
+    public function __invoke(bool $isGraphQLRequest): array|int
     {
         $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
 
