@@ -8,7 +8,8 @@ use GraphQL\Error\Error;
 class ErrorHandler implements \Nuwave\Lighthouse\Execution\ErrorHandler
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
      * @throws ClientSafeHttpResponseException
      */
     public function __invoke(?Error $error, Closure $next): ?array
