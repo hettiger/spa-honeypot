@@ -2,6 +2,7 @@
 
 namespace Hettiger\Honeypot;
 
+use Hettiger\Honeypot\GraphQL\Exceptions\ErrorHandler;
 use Hettiger\Honeypot\Http\Middleware\AbortWhenHoneypotIsFilled;
 use Hettiger\Honeypot\Http\Middleware\HandleFormTokenRequests;
 use Hettiger\Honeypot\Http\Middleware\RequireFormToken;
@@ -40,6 +41,7 @@ class HoneypotServiceProvider extends PackageServiceProvider
         $this->appendCorsConfig();
         $this->registerMiddleware();
         $this->registerGraphQLNamespaces();
+        $this->appendLighthouseConfig();
     }
 
     public function appendCorsConfig(): void
@@ -73,5 +75,12 @@ class HoneypotServiceProvider extends PackageServiceProvider
                 'Hettiger\\Honeypot\\GraphQL\Directives',
             ]
         );
+    }
+
+    public function appendLighthouseConfig(): void
+    {
+        if (config()->has('lighthouse.error_handlers')) {
+            config()->push('lighthouse.error_handlers', ErrorHandler::class);
+        }
     }
 }
