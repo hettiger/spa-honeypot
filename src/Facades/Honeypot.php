@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Facade;
  */
 class Honeypot extends Facade
 {
-    protected static function getFacadeAccessor()
+    protected static function getFacadeAccessor(): string
     {
         return \Hettiger\Honeypot\Honeypot::class;
     }

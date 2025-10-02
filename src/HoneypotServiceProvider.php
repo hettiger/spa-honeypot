@@ -33,7 +33,7 @@ class HoneypotServiceProvider extends PackageServiceProvider
             });
     }
 
-    public function boot()
+    public function boot(): void
     {
         parent::boot();
 
@@ -42,7 +42,7 @@ class HoneypotServiceProvider extends PackageServiceProvider
         $this->registerGraphQLNamespaces();
     }
 
-    public function appendCorsConfig()
+    public function appendCorsConfig(): void
     {
         config()->push('cors.exposed_headers', config('header'));
         config()->push('cors.paths', config('token_route_path'));
@@ -63,7 +63,7 @@ class HoneypotServiceProvider extends PackageServiceProvider
         $router->middlewareGroup('form', ['form.honeypot', 'form.token']);
     }
 
-    public function registerGraphQLNamespaces()
+    public function registerGraphQLNamespaces(): void
     {
         $events = resolveByType(Dispatcher::class);
 

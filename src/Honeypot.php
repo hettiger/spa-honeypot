@@ -23,12 +23,12 @@ class Honeypot
         $this->makeFormTokenErrorResponse = resolve(config('form_token_error_response_factory'))(...);
     }
 
-    public function respondToHoneypotErrorsUsing(Closure $makeResponse)
+    public function respondToHoneypotErrorsUsing(Closure $makeResponse): void
     {
         $this->makeHoneypotErrorResponse = $makeResponse;
     }
 
-    public function respondToFormTokenErrorsUsing(Closure $makeResponse)
+    public function respondToFormTokenErrorsUsing(Closure $makeResponse): void
     {
         $this->makeFormTokenErrorResponse = $makeResponse;
     }
