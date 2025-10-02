@@ -3,6 +3,7 @@
 namespace Hettiger\Honeypot\GraphQL\Scalars;
 
 use GraphQL\Error\Error;
+use GraphQL\Language\AST\Node;
 use GraphQL\Type\Definition\ScalarType;
 use Hettiger\Honeypot\Facades\Honeypot;
 
@@ -17,9 +18,10 @@ final class HoneypotScalar extends ScalarType
      * Serializes an internal value to include in a response.
      *
      * @param  mixed  $value
-     * @return mixed
+     *
+     * @throws Error
      */
-    public function serialize($value)
+    public function serialize($value): mixed
     {
         throw new Error('Serializing honeypot is not supported.');
     }
@@ -28,9 +30,8 @@ final class HoneypotScalar extends ScalarType
      * Parses an externally provided value (query variable) to use as an input
      *
      * @param  mixed  $value
-     * @return mixed
      */
-    public function parseValue($value)
+    public function parseValue($value): mixed
     {
         if (! config('enabled')) {
             return $value;
@@ -52,11 +53,11 @@ final class HoneypotScalar extends ScalarType
      *   user(email: "user@example.com")
      * }
      *
-     * @param  \GraphQL\Language\AST\Node  $valueNode
      * @param  array<string, mixed>|null  $variables
-     * @return mixed
+     *
+     * @throws Error
      */
-    public function parseLiteral($valueNode, ?array $variables = null)
+    public function parseLiteral(Node $valueNode, ?array $variables = null): mixed
     {
         if (! property_exists($valueNode, 'value')) {
             throw new Error('Type of $valueNode does not provide a value property.');

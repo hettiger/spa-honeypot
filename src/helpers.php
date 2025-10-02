@@ -2,6 +2,8 @@
 
 namespace Hettiger\Honeypot;
 
+use Illuminate\Config\Repository;
+
 /**
  * Returns a service of the given `$type` from the container
  *
@@ -18,10 +20,10 @@ function resolveByType(mixed $type, array $parameters = []): mixed
 /**
  * Get / set the specified configuration value.
  *
- * If a string is passed as the key, we prepend `spa-honeypot.` when appropriate.
+ * If a string is passed as the key, we prepend with `'spa-honeypot.'` when appropriate.
  * If an array is passed as the key, we will assume you want to set an array of values.
  *
- * @return mixed|\Illuminate\Config\Repository
+ * @return mixed|Repository
  */
 function config(array|null|string $key = null, mixed $default = null): mixed
 {

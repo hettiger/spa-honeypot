@@ -12,7 +12,7 @@ class FormToken
     /**
      * The token ID
      *
-     * A valid token ID is a UUID and we could type this as an `UuidInterface`.
+     * A valid token ID is a UUID, and we could type this as an `UuidInterface`.
      * However, we consider any input as a `FormToken` that can be validated.
      * Therefore, it's necessary to use a more generous type here …
      */

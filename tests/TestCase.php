@@ -5,6 +5,7 @@ namespace Hettiger\Honeypot\Tests;
 use Hettiger\Honeypot\HoneypotServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Nuwave\Lighthouse\LighthouseServiceProvider;
+use Nuwave\Lighthouse\Testing\TestingServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
@@ -23,6 +24,7 @@ class TestCase extends Orchestra
         return [
             HoneypotServiceProvider::class,
             LighthouseServiceProvider::class,
+            TestingServiceProvider::class,
         ];
     }
 

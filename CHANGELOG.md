@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 <!-- CHANGELOGGER -->
 
+## [v0.2.0] - 2025-10-02
+
+### Bug fix (1 change)
+
+- Fix CI pipeline to adopt new version matrix
+
+### New feature (2 changes)
+
+- Add Laravel 11 Support
+- Add Lighthouse 6 Support
+
+### Feature removal (2 changes)
+
+- Drop PHP 8.1 Support
+- Remove Lighthouse 5 Support
+
+
 ## [0.1.0] - 2025-09-30
 
 ### New feature (1 change)
