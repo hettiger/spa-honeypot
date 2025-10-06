@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 <!-- CHANGELOGGER -->
 
+## [v0.3.0] - 2025-10-06
+
+### New feature (2 changes)
+
+- Add Laravel 12 Support
+- Add PHP 8.4 Support
+
+
 ## [v0.2.0] - 2025-10-02
 
 ### Bug fix (1 change)
